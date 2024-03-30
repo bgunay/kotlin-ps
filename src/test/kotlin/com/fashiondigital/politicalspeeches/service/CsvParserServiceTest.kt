@@ -23,9 +23,6 @@ import org.springframework.test.web.client.response.MockRestResponseCreators
 import org.springframework.web.client.RestTemplate
 
 
-@RestClientTest(CsvParserService::class)
-@Import(AppConfig::class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 internal class CsvParserServiceTest {
     @Autowired
     private lateinit var restTemplate: RestTemplate

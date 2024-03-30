@@ -32,6 +32,7 @@ dependencies {
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
 
+	testImplementation ("io.mockk:mockk:1.9.3")
 
 
 }
