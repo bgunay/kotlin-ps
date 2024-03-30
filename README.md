@@ -5,6 +5,12 @@ Process statistics about political speeches.
 
 ### Configuration
 - You can change variables from `application.properties` under resources
+- 
+### Important Note:
+- Two projects implemented, V1 and V2 (github branches)
+- They have small differences. V2 is done for simplicity in some cases.
+
+
 
 ### To run project
 ```
@@ -12,12 +18,9 @@ First Step:
 gradle build
 
 Second Step (Or you can run from runnable classes)
-V1: gradlew bootRun
-V2: gradle run
+(Branch) V1: gradlew bootRun
+(Branch) V2: gradle run
 ```
-
-- Two projects implemented, V1 and V2 (branches) 
-- You can think of V2, improvement on V1 
 
 ## Usage 
 ### Evaluating Speeches
@@ -26,8 +29,7 @@ The application exposes a GET endpoint `/evaluation` that accepts CSV file URLs 
 
 ### To run tests
 ```
-v1: gradlew test
-v2: gradlew test
+gradlew test
 ```
 
 ### Endpoint
