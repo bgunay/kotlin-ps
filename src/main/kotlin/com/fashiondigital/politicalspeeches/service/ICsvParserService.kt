@@ -1,7 +1,7 @@
 package com.fashiondigital.politicalspeeches.service
 
-import com.fashiondigital.politicalspeeches.model.Speech
+import com.fashiondigital.politicalspeeches.model.SpeakerStats
 
 interface ICsvParserService {
-    suspend fun parseCSVsByUrls(urls: List<String>): List<Speech>
+    fun parseCSVsByUrls(urls: Set<String>): Map<String, SpeakerStats>
 }

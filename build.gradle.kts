@@ -10,7 +10,6 @@ plugins {
 group = "com.fashiondigital"
 version = "0.0.1-SNAPSHOT"
 
-
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
 }
@@ -18,8 +17,6 @@ java {
 repositories {
 	mavenCentral()
 }
-
-val ktor_version="2.3.7"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -35,17 +32,6 @@ dependencies {
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
 
-	implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-	implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
-	implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
-	implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
-	implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
-	implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
-	implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-	implementation("io.ktor:ktor-client-core-jvm:$ktor_version")
-	implementation("io.ktor:ktor-client-cio-jvm:$ktor_version")
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
-	implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.2")
 
 
 }

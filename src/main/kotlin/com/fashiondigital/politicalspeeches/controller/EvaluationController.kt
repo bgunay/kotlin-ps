@@ -28,10 +28,10 @@ class EvaluationController(@Autowired val evaluationService: IEvaluationService)
         ApiResponse(responseCode="200", description = "Successful Operation",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = ResponseEntity::class))])
     ])
-    suspend fun evaluate(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> {
+    fun evaluate(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> {
         //Only valid if params are like "url1=address,url2=address,urlN..."
         val urlParams: Set<String> = UrlHeaderValidation.extractAndValidateUrlsFromRequest(headers)
-        val result: EvaluationResult = evaluationService.evaluate(urlParams.toList())
+        val result: EvaluationResult = evaluationService.evaluate(urlParams)
         return ResponseEntity.ok(result)
     }
 }
