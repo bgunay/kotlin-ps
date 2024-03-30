@@ -3,6 +3,7 @@ package com.fashiondigital.politicalspeeches.model
 
 enum class ErrorCode(val value: String) {
     CSV_PARSER_ERROR("Failed to parse csv file."),
+    CSV_EMPTY_BODY_ERROR("Fetched CSV is empty!"),
     URL_READER_ERROR("Failed to read url."),
     URL_VALIDATION_ERROR("Failed to parse url."),
     UNSUPPORTED_PROTOCOL("Supported protocols are http and https."),

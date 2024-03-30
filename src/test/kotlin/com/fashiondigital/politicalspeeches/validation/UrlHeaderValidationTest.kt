@@ -1,4 +1,4 @@
-package com.fashiondigital.politicalspeeches.controller.validation
+package com.fashiondigital.politicalspeeches.validation
 
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.validation.UrlHeaderValidation

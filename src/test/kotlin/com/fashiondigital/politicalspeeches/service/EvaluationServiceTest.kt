@@ -47,9 +47,9 @@ internal class EvaluationServiceTest {
     @Test
     fun evaluate_withNotUniqueFields() {
         val speakerStatsMap: Map<String, SpeakerStats> = java.util.Map.of<String, SpeakerStats>(
-                SPEAKER_1, SpeakerStats(1, 2, 3),
-                SPEAKER_2, SpeakerStats(1, 2, 3),
-                SPEAKER_3, SpeakerStats(1, 2, 3)
+            SPEAKER_1, SpeakerStats(1, 2, 3),
+            SPEAKER_2, SpeakerStats(1, 2, 3),
+            SPEAKER_3, SpeakerStats(1, 2, 3)
         )
         Mockito.`when`(csvParserService.parseCSVsByUrls(URLS)).thenReturn(speakerStatsMap)
 

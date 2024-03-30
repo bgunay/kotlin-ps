@@ -7,6 +7,7 @@ import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.SpeakerStats
 import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.function.Executable
@@ -84,7 +85,7 @@ internal class CsvParserServiceTest {
     @Throws(Exception::class)
     fun parseCSVsByUrls_withWrongDelimiter_failed() {
         mockUrlCall(CSV_URL_1, INVALID_SPEECHES_DELIMITER)
-        val ex: Exception = org.junit.jupiter.api.Assertions.assertThrows(EvaluationServiceException::class.java) { csvParserService!!.parseCSVsByUrls(setOf(CSV_URL_1)) }
+        val ex: Exception = assertThrows(EvaluationServiceException::class.java) { csvParserService.parseCSVsByUrls(setOf(CSV_URL_1)) }
         assertThat(ex.message).isEqualTo(ErrorCode.CSV_PARSER_ERROR.value)
     }
 
@@ -92,15 +93,15 @@ internal class CsvParserServiceTest {
     @Throws(Exception::class)
     fun parseCSVsByUrls_withEmptyCsv_failed() {
         mockUrlCall(CSV_URL_1, INVALID_SPEECHES_EMPTY)
-        val ex: EvaluationServiceException = org.junit.jupiter.api.Assertions.assertThrows(EvaluationServiceException::class.java, Executable { csvParserService!!.parseCSVsByUrls(setOf(CSV_URL_1)) })
-        assertThat(ex.message).isEqualTo(ErrorCode.CSV_PARSER_ERROR.value)
+        val ex: EvaluationServiceException = assertThrows(EvaluationServiceException::class.java, Executable { csvParserService.parseCSVsByUrls(setOf(CSV_URL_1)) })
+        assertThat(ex.message).isEqualTo(ErrorCode.CSV_EMPTY_BODY_ERROR.value)
     }
 
     @Test
     @Throws(Exception::class)
     fun parseCSVsByUrls_withWrongDate_failed() {
         mockUrlCall(CSV_URL_1, INVALID_SPEECHES_DATE)
-        val ex: Exception = org.junit.jupiter.api.Assertions.assertThrows(EvaluationServiceException::class.java) { csvParserService!!.parseCSVsByUrls(setOf(CSV_URL_1)) }
+        val ex: Exception = assertThrows(EvaluationServiceException::class.java) { csvParserService.parseCSVsByUrls(setOf(CSV_URL_1)) }
         assertThat(ex.message).isEqualTo(ErrorCode.CSV_PARSER_ERROR.value)
     }
 
@@ -108,7 +109,7 @@ internal class CsvParserServiceTest {
     @Throws(Exception::class)
     fun parseCSVsByUrls_withMinusNumber_failed() {
         mockUrlCall(CSV_URL_1, INVALID_SPEECHES_MINUS_WORDS)
-        val ex: Exception = org.junit.jupiter.api.Assertions.assertThrows(EvaluationServiceException::class.java) { csvParserService!!.parseCSVsByUrls(setOf(CSV_URL_1)) }
+        val ex: Exception = assertThrows(EvaluationServiceException::class.java) { csvParserService.parseCSVsByUrls(setOf(CSV_URL_1)) }
         assertThat(ex.message).isEqualTo(ErrorCode.CSV_PARSER_ERROR.value)
     }
 
@@ -117,7 +118,7 @@ internal class CsvParserServiceTest {
         mockServer.expect(MockRestRequestMatchers.requestTo(CSV_URL_1))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withBadRequest())
-        val ex: Exception = org.junit.jupiter.api.Assertions.assertThrows(EvaluationServiceException::class.java) { csvParserService!!.parseCSVsByUrls(setOf(CSV_URL_1)) }
+        val ex: Exception = assertThrows(EvaluationServiceException::class.java) { csvParserService.parseCSVsByUrls(setOf(CSV_URL_1)) }
         assertThat(ex.message).isEqualTo(ErrorCode.URL_READER_ERROR.value)
     }
 

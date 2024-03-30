@@ -21,37 +21,52 @@ class EvaluationService(@Autowired val csvParserService: ICsvParserService) : IE
 
     private fun findSpeakerByMostSpeeches(speakerStatsMap: Map<String, SpeakerStats>): String? {
         var speaker: String? = null
+        var count = 0
         var max = 0
-        for ((key, value) in speakerStatsMap) {
-            if (value.targetYearSpeeches > max) {
-                max = value.targetYearSpeeches
-                speaker = key
+        for (spkr in speakerStatsMap.keys) {
+            if (speakerStatsMap[spkr]?.targetYearSpeeches!! > max) {
+                max = speakerStatsMap[spkr]?.targetYearSpeeches!!
+                speaker = spkr
+                count = 1
+            } else if (speakerStatsMap[spkr]?.targetYearSpeeches!! == max) {
+                count += 1 //multiple speakers with same speech-count
             }
         }
-        return speaker
+        //return a unique speaker Otherwise it is null.
+        return if (count == 1) speaker else null
     }
 
     private fun findSpeakerByMostSecuritySpeeches(speakerStatsMap: Map<String, SpeakerStats>): String? {
         var speaker: String? = null
+        var count = 0
         var max = 0
-        for ((key, value) in speakerStatsMap) {
-            if (value.securitySpeeches > max) {
-                max = value.securitySpeeches
-                speaker = key
+        for (spkr in speakerStatsMap.keys) {
+            if (speakerStatsMap[spkr]?.securitySpeeches!! > max) {
+                max = speakerStatsMap[spkr]?.securitySpeeches!!
+                speaker = spkr
+                count = 1
+            } else if (speakerStatsMap[spkr]?.securitySpeeches!! == max) {
+                count += 1 //multiple speakers with same speech-count
             }
         }
-        return speaker
+        //return a unique speaker Otherwise it is null.
+        return if (count == 1) speaker else null
     }
 
     private fun findSpeakerByLeastWordySpeeches(speakerStatsMap: Map<String, SpeakerStats>): String? {
         var speaker: String? = null
+        var count = 0
         var min = Int.MAX_VALUE
-        for ((key, value) in speakerStatsMap) {
-            if (value.overallWords < min) {
-                min = value.overallWords
-                speaker = key
+        for (spkr in speakerStatsMap.keys) {
+            if (speakerStatsMap[spkr]?.overallWords!! < min) {
+                min = speakerStatsMap[spkr]?.overallWords!!
+                speaker = spkr
+                count = 1
+            } else if (speakerStatsMap[spkr]?.overallWords!! == min) {
+                count += 1 //multiple speakers with same word-count
             }
         }
-        return speaker
+        //return a unique speaker Otherwise it is null.
+        return if (count == 1) speaker else null
     }
 }
