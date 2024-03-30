@@ -30,6 +30,9 @@ dependencies {
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0")
 
+	implementation("org.apache.httpcomponents.client5:httpclient5:5.3.1")
+
+
 }
 
 tasks.withType<KotlinCompile> {

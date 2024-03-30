@@ -1,7 +1,7 @@
 # Political Speech
 Process statistics about political speeches.
 ### Requirements
-- Java 17, Spring Boot, Gradle
+- Java 17, Gradle, Static File Server(nginx)
 
 ### Configuration
 - You can change variables from `application.properties` under resources

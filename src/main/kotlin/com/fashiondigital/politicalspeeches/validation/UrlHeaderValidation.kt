@@ -1,8 +1,8 @@
 package com.fashiondigital.politicalspeeches.validation
 
-import com.fashiondigital.politicalspeeches.model.constants.Constants
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
+import com.fashiondigital.politicalspeeches.model.constants.Constants
 import java.net.URL
 
 
