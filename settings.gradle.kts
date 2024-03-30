@@ -1,1 +1,1 @@
-rootProject.name = "political-speeches"
+rootProject.name = "political-speech"

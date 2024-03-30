@@ -20,17 +20,18 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.apache.commons:commons-csv:1.10.0")
 	implementation("org.apache.commons:commons-io:1.3.2")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.apache.httpcomponents.client5:httpclient5:5.3.1")
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
-
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0")
 
-	implementation("org.apache.httpcomponents.client5:httpclient5:5.3.1")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
+
 
 
 }

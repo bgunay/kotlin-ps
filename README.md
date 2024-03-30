@@ -23,7 +23,16 @@ Host: localhost:8080
 
 - Yuu can use nginx easily for host static files
 ```
-
+### Swagger and ApiDoc addresses:
+```
+http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/v3/api-docs
+```
+- Example Swagger Request:
+  ![img.png](img.png)
+- Example Postman Request:
+- ![img_1.png](img_1.png)
+- 
 ### Restrictions
 - Url format should be `/evaluate?url1=...&url2=...&urln=...` Other query-params will be ignored.
 - Url schema should be `http` or `https`. Other protocols (`file`, `ftp`...) give error.
