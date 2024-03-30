@@ -7,10 +7,10 @@ data class Speech(
         val speaker: String,
         val topic: String,
         val date: LocalDate,
-        val words: Int = 0
+        val wordCount: Int = 0
 ) {
     init {
-        require(words > 0)
+        require(wordCount > 0)
     }
 
     fun isSecurityTopic(securityTopic: String): Boolean {

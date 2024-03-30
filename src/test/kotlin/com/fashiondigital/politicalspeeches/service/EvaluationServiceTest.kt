@@ -30,7 +30,7 @@ internal class EvaluationServiceTest {
 
     @Test
     fun evaluate_withAllValidFields() {
-        val speakerStatsMap: Map<String, SpeakerStats> = java.util.Map.of<String, SpeakerStats>(
+        val speakerStatsMap: List<String> = mutableListOf()<String>(
                 SPEAKER_1, SpeakerStats(1, 2, 1),
                 SPEAKER_2, SpeakerStats(2, 3, 2),
                 SPEAKER_3, SpeakerStats(3, 1, 3)

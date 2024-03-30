@@ -13,7 +13,8 @@ class GlobalExceptionHandler {
     fun handleException(ex: EvaluationServiceException): ResponseEntity<ErrorMessageModel> {
         val errorMessageModel: ErrorMessageModel = ErrorMessageModel(
                 errorCode = ex.errorCode,
-                errorMessage = ex.message)
+                errorMessage = " ${ ex.message },  ${ex.cause?.message} "
+        )
         return ResponseEntity<ErrorMessageModel>(errorMessageModel, HttpStatus.BAD_REQUEST)
     }
 }
