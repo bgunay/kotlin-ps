@@ -26,9 +26,9 @@ dependencies {
 	implementation("org.apache.commons:commons-io:1.3.2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-	runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
 
-	runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0")
 
 }
 

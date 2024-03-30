@@ -1,9 +1,9 @@
-package com.fashiondigital.politicalspeeches.service
+package com.fashiondigital.politicalspeeches.service.impl
 
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
 import com.fashiondigital.politicalspeeches.model.SpeakerStats
-import com.fashiondigital.politicalspeeches.service.impl.ICsvParserService
-import com.fashiondigital.politicalspeeches.service.impl.IEvaluationService
+import com.fashiondigital.politicalspeeches.service.ICsvParserService
+import com.fashiondigital.politicalspeeches.service.IEvaluationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

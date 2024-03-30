@@ -1,11 +1,11 @@
-package com.fashiondigital.politicalspeeches.service
+package com.fashiondigital.politicalspeeches.service.impl
 
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.SpeakerStats
 import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.model.SpeechHeader
-import com.fashiondigital.politicalspeeches.service.impl.ICsvParserService
+import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.springframework.beans.factory.annotation.Autowired

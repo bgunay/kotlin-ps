@@ -2,7 +2,7 @@ package com.fashiondigital.politicalspeeches.controller
 
 import com.fashiondigital.politicalspeeches.validation.UrlHeaderValidation
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
-import com.fashiondigital.politicalspeeches.service.impl.IEvaluationService
+import com.fashiondigital.politicalspeeches.service.IEvaluationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

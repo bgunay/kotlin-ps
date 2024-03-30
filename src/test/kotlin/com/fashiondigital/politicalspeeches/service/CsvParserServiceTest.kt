@@ -5,6 +5,7 @@ import com.fashiondigital.politicalspeeches.config.AppConfig
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.SpeakerStats
+import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

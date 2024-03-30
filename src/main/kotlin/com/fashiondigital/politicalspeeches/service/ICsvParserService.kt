@@ -1,4 +1,4 @@
-package com.fashiondigital.politicalspeeches.service.impl
+package com.fashiondigital.politicalspeeches.service
 
 import com.fashiondigital.politicalspeeches.model.SpeakerStats
 

@@ -3,7 +3,7 @@ package com.fashiondigital.politicalspeeches.controller
 import com.fashiondigital.politicalspeeches.exception.GlobalExceptionHandler
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
-import com.fashiondigital.politicalspeeches.service.impl.IEvaluationService
+import com.fashiondigital.politicalspeeches.service.IEvaluationService
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

@@ -2,6 +2,8 @@ package com.fashiondigital.politicalspeeches.service
 
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
 import com.fashiondigital.politicalspeeches.model.SpeakerStats
+import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
+import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

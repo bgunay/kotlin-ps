@@ -1,9 +1,7 @@
-# Political Speeches
-Processing statistics about political speeches.
-This is a Spring Boot Gradle project that is written in Kotlin
-
+# Political Speech
+Process statistics about political speeches.
 ### Requirements
-- Java 17
+- Java 17, Spring Boot, Gradle
 
 ### Configuration
 - You can change variables from `application.properties` under resources
@@ -22,6 +20,8 @@ gradlew test
 ```
 GET /evaluate?url1=https://example.com/valid-speeches-1.csv
 Host: localhost:8080
+
+- Yuu can use nginx easily for host static files
 ```
 
 ### Restrictions

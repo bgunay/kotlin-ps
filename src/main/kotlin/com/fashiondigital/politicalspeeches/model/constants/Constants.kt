@@ -1,4 +1,4 @@
-package com.fashiondigital.politicalspeeches
+package com.fashiondigital.politicalspeeches.model.constants
 
 import java.util.regex.Pattern
 
