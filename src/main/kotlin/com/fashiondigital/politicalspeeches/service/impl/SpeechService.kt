@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class EvaluationService(@Autowired val csvParserService: ICsvParserService) : IEvaluationService {
+class SpeechService : IEvaluationService {
 
 
     @Value("\${speech.target-year}")
@@ -19,8 +19,7 @@ class EvaluationService(@Autowired val csvParserService: ICsvParserService) : IE
     @Value("\${speech.security-topic}")
     private val securityTopic: String? = null
 
-    override fun evaluate(urls: Set<String>): EvaluationResult {
-        val speeches = csvParserService.parseCSVsByUrls(urls)
+    override fun analyzeSpeeches(speeches: List<Speech>): EvaluationResult {
         val mostSpeeches = findUniqueMax(speeches.filter { it.date.year == targetYear }, Speech::speaker)
         val mostSecurity = findUniqueMax(speeches.filter { it.topic == securityTopic }, Speech::speaker)
         val leastWordy = findUniqueMin(speeches, Speech::speaker)

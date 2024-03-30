@@ -11,10 +11,10 @@ import org.springframework.web.client.RestTemplate
 
 
 @Component
-class HttpClient {
+class HttpClient{
 
     @Autowired
-    private lateinit var restTemplate: RestTemplate
+    lateinit var restTemplate: RestTemplate
 
     fun getHttpCSVResponse(url: String): ResponseEntity<String?> {
         val response: ResponseEntity<String?>

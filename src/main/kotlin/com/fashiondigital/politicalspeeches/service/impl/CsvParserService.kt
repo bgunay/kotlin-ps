@@ -41,9 +41,9 @@ class CsvParserService(@Autowired val httpClient: HttpClient) : ICsvParserServic
 
 
     //TODO: assumed there isn't any duplication on csv files.
-    fun parseCSV(csvData: String): List<Speech> {
+    fun parseCSV(csvData: String?): List<Speech> {
         val csvFormat = CSVUtil.setCVSFormat()
-        val csvParser = CSVParser.parse(csvData.byteInputStream(), StandardCharsets.UTF_8, csvFormat)
+        val csvParser = CSVParser.parse(csvData!!.byteInputStream(), StandardCharsets.UTF_8, csvFormat)
         val records = csvParser.records
         return try {
             records.map {
