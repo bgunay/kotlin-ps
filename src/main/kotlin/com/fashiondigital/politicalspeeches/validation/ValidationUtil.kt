@@ -6,7 +6,7 @@ import com.fashiondigital.politicalspeeches.model.constants.Constants
 import java.net.URL
 
 
-object UrlHeaderValidation {
+object ValidationUtil {
     //no need to support file, ftp or jar
 
     fun extractAndValidateUrlsFromRequest(headers: Map<String, String>): Set<String> {
@@ -41,4 +41,6 @@ object UrlHeaderValidation {
             }
         }
     }
+
+
 }

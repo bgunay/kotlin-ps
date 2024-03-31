@@ -1,9 +1,9 @@
 package com.fashiondigital.politicalspeeches.service
 
 
+import com.fashiondigital.politicalspeeches.TestUtils
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
 import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
-import com.fashiondigital.politicalspeeches.utils.SpeechUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -29,11 +29,11 @@ internal class EvaluationServiceTest {
         ReflectionTestUtils.setField(evaluationService, "targetYear", 2013);
         ReflectionTestUtils.setField(evaluationService, "securityTopic", "homeland security");
 
-        val result: EvaluationResult = evaluationService.analyzeSpeeches(SpeechUtils.validSpeeches1)
+        val result: EvaluationResult = evaluationService.analyzeSpeeches(TestUtils.validSpeeches1)
 
         assertNull(result.mostSpeeches)
-        assertThat(result.mostSecurity).isEqualTo(SpeechUtils.SPEAKER_1)
-        assertThat(result.leastWordy).isEqualTo(SpeechUtils.SPEAKER_3)
+        assertThat(result.mostSecurity).isEqualTo(TestUtils.SPEAKER_1)
+        assertThat(result.leastWordy).isEqualTo(TestUtils.SPEAKER_3)
     }
 
     @Test
@@ -41,10 +41,10 @@ internal class EvaluationServiceTest {
         ReflectionTestUtils.setField(evaluationService, "targetYear", 2013);
         ReflectionTestUtils.setField(evaluationService, "securityTopic", "homeland security");
 
-        val result: EvaluationResult = evaluationService.analyzeSpeeches(SpeechUtils.notUniqueSpeechs)
+        val result: EvaluationResult = evaluationService.analyzeSpeeches(TestUtils.notUniqueSpeechs)
 
         assertThat(result.mostSpeeches).isNull()
-        assertThat(result.mostSecurity).isEqualTo(SpeechUtils.SPEAKER_1)
+        assertThat(result.mostSecurity).isEqualTo(TestUtils.SPEAKER_1)
         assertThat(result.leastWordy).isNull()
     }
 
@@ -53,10 +53,11 @@ internal class EvaluationServiceTest {
         ReflectionTestUtils.setField(evaluationService, "targetYear", 2013);
         ReflectionTestUtils.setField(evaluationService, "securityTopic", "homeland security");
 
-        val result: EvaluationResult = evaluationService.analyzeSpeeches(SpeechUtils.zerFieldSpeechs())
+        val result: EvaluationResult = evaluationService.analyzeSpeeches(TestUtils.zerFieldSpeechs())
 
         assertThat(result.mostSpeeches).isNull()
-        assertThat(result.mostSecurity).isEqualTo(SpeechUtils.SPEAKER_1)
+        assertThat(result.mostSecurity).isNull()
         assertThat(result.leastWordy).isNull()
     }
+
 }

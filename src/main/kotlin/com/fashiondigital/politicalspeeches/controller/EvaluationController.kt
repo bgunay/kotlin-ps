@@ -3,7 +3,7 @@ package com.fashiondigital.politicalspeeches.controller
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
 import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import com.fashiondigital.politicalspeeches.service.IEvaluationService
-import com.fashiondigital.politicalspeeches.validation.UrlHeaderValidation
+import com.fashiondigital.politicalspeeches.validation.ValidationUtil
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -33,7 +33,7 @@ class EvaluationController(
     ])
     fun evaluate(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> {
         //Only valid if params are like "url1=address,url2=address,urlN..."
-        val urlParams: Set<String> = UrlHeaderValidation.extractAndValidateUrlsFromRequest(headers)
+        val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
         val speeches = csvParserService.parseCSVsByUrls(urlParams)
         val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
         return ResponseEntity.ok(result)
