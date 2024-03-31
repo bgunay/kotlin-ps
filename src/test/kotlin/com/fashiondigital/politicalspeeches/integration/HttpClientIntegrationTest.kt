@@ -1,9 +1,9 @@
-package com.fashiondigital.politicalspeeches.service
+package com.fashiondigital.politicalspeeches.integration
 
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
-import com.fashiondigital.politicalspeeches.service.impl.SpeechService
+import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -28,7 +28,7 @@ class HttpClientIntegrationTest {
     @Autowired
     private val httpClient = HttpClient()
     @Autowired
-    private val speechService = SpeechService()
+    private val evaluationService = EvaluationService()
 
 
     @Test
@@ -44,7 +44,7 @@ class HttpClientIntegrationTest {
             parseCSV
         }
 
-        val statistics = speechService.analyzeSpeeches(allSpeeches)
+        val statistics = evaluationService.analyzeSpeeches(allSpeeches)
 
         assertEquals(null, statistics.mostSpeeches)
         assertEquals("Caesare Collins", statistics.mostSecurity)

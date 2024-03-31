@@ -2,15 +2,13 @@ package com.fashiondigital.politicalspeeches.service.impl
 
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
 import com.fashiondigital.politicalspeeches.model.Speech
-import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import com.fashiondigital.politicalspeeches.service.IEvaluationService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 
 @Service
-class SpeechService : IEvaluationService {
+class EvaluationService : IEvaluationService {
 
 
     @Value("\${speech.target-year}")

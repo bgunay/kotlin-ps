@@ -22,7 +22,7 @@ import java.util.*
 class CsvParserService(@Autowired val httpClient: HttpClient) : ICsvParserService {
 
     companion object {
-        private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.ENGLISH)
+        val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.ENGLISH)
     }
 
 

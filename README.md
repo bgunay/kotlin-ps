@@ -18,7 +18,7 @@ First Step:
 gradle build
 
 Second Step (Or you can run from runnable classes)
-gradle run
+gradlew bootRun
 ```
 
 ## Usage 
