@@ -1,17 +1,22 @@
 package com.fashiondigital.politicalspeeches.validation
 
+import com.fashiondigital.politicalspeeches.exception.CsvParsingException
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
+import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.model.constants.Constants
-import org.apache.commons.csv.CSVRecord
 import org.apache.logging.log4j.util.Strings
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import java.net.URL
 
 
 object ValidationUtil {
-    //no need to support file, ftp or jar
 
+    private val log: Logger = LoggerFactory.getLogger(ValidationUtil::class.java)
+
+    //no need to support file, ftp or jar
     fun extractAndValidateUrlsFromRequest(headers: Map<String, String>): Set<String> {
         val result: MutableSet<String> = HashSet()
         for (key in headers.keys) {
@@ -38,6 +43,7 @@ object ValidationUtil {
             }
             true
         } catch (e: Exception) {
+            log.error(ErrorCode.UNSUPPORTED_PROTOCOL.value)
             when (e) {
                 is EvaluationServiceException -> throw EvaluationServiceException(ErrorCode.UNSUPPORTED_PROTOCOL)
                 else -> throw EvaluationServiceException(ErrorCode.URL_VALIDATION_ERROR, e)
@@ -47,21 +53,29 @@ object ValidationUtil {
 
     fun checkCsvValid(response: ResponseEntity<String?>): Boolean {
         if (!response.hasBody() || Strings.isEmpty(response.body)) {
-            throw EvaluationServiceException(ErrorCode.CSV_EMPTY_BODY_ERROR)
+            log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value)
+            throw CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
         }
-        if(response.hasBody() && response.body!!.contains(",")  ){
-            throw EvaluationServiceException(ErrorCode.CSV_PARSER_ERROR)
+        if (response.hasBody() && response.body!!.contains(",")) {
+            log.error(ErrorCode.WRONG_DELIMITER_CSV.value)
+            throw CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
         }
 
         return true
     }
 
-    fun checkWordCounts(records: List<CSVRecord>) {
-        records.forEach {
-            val wordCount = it.get("Words").toInt()
-            if (wordCount < 0) {
-                throw EvaluationServiceException(ErrorCode.CSV_PARSER_ERROR)
-            }
+    fun validateSpeech(speech: Speech) {
+        if (speech.wordCount < 0) {
+            log.error(ErrorCode.MINUS_WORD_ERROR.value)
+            throw CsvParsingException(ErrorCode.MINUS_WORD_ERROR)
+        }
+        if (Strings.isEmpty(speech.topic)) {
+            log.error(ErrorCode.TOPIC_MISSING.value)
+            throw CsvParsingException(ErrorCode.TOPIC_MISSING)
+        }
+        if (Strings.isEmpty(speech.speaker)) {
+            log.error(ErrorCode.SPEAKER_MISSING.value)
+            throw CsvParsingException(ErrorCode.SPEAKER_MISSING)
         }
     }
 

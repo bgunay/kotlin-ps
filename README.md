@@ -28,6 +28,8 @@ The application exposes a GET endpoint `/evaluation` that accepts CSV file URLs 
 ### To run tests
 ```
 gradlew test
+
+* !! For integration test to success,  change csv.server.address" property where you host CSV files
 ```
 
 ### Endpoint
@@ -49,11 +51,11 @@ http://localhost:8080/v3/api-docs
 https://www.postman.com/bgunay1/workspace/public-workspace/collection/1152813-9c321f49-1a3a-4189-841b-e4ead905e850?action=share&creator=1152813
 ```
 ## Screenshots
-- ![img_1.png](img_1.png)
+- ![img_1.png](screenshots/img_postman.png)
 
 
 Swagger Request View:
--  ![img.png](img.png)
+-  ![img.png](screenshots/img.png)
 - 
 ### Restrictions
 - Url format should be `/evaluate?url1=...&url2=...&urln=...` Other query-params will be ignored.

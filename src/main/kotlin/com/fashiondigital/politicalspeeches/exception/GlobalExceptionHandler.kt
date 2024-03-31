@@ -16,4 +16,14 @@ class GlobalExceptionHandler {
                 errorMessage = ex.message)
         return ResponseEntity<ErrorMessageModel>(errorMessageModel, HttpStatus.BAD_REQUEST)
     }
+
+    @ExceptionHandler(CsvParsingException::class)
+    fun handleCsvException(ex: CsvParsingException): ResponseEntity<ErrorMessageModel> {
+        val errorMessageModel = ErrorMessageModel(
+            errorCode = ex.errorCode,
+            errorMessage = ex.message)
+        return ResponseEntity<ErrorMessageModel>(errorMessageModel, HttpStatus.BAD_REQUEST)
+    }
+
+
 }

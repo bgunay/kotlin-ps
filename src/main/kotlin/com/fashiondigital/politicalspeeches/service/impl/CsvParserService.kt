@@ -10,6 +10,8 @@ import com.fashiondigital.politicalspeeches.util.CSVUtil
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
 import org.apache.commons.csv.CSVParser
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -22,14 +24,17 @@ import java.util.*
 @Service
 class CsvParserService(@Autowired val httpClient: HttpClient) : ICsvParserService {
 
+    private val log: Logger = LoggerFactory.getLogger(CsvParserService::class.java)
+
     companion object {
         val DATE_TIME_FORMATTER: DateTimeFormatter =
             DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.ENGLISH)
     }
 
 
-    //return <Speaker, Stats>
+    //return <Speaker>
     override fun parseCSVsByUrls(urls: Set<String>): List<Speech> {
+        log.info("parsing ${urls.size} urls started")
         val speeches = mutableListOf<Speech>()
         urls.forEach {
             val response: ResponseEntity<String?> = httpClient.getHttpCSVResponse(it)
@@ -42,23 +47,34 @@ class CsvParserService(@Autowired val httpClient: HttpClient) : ICsvParserServic
 
     //TODO: assumed there isn't any duplication on csv files.
     fun parseCSV(csvData: String?): List<Speech> {
+        log.info("CSV content parsing started")
         val csvFormat = CSVUtil.setCVSFormat()
         val csvParser = CSVParser.parse(csvData!!.byteInputStream(), StandardCharsets.UTF_8, csvFormat)
         val records = csvParser.records
-        ValidationUtil.checkWordCounts(records)
-        return try {
-            records.map {
-                Speech(
-                    speaker = it.get("Speaker") ?: throw CsvParsingException("Speaker is missing"),
-                    topic = it.get("Topic") ?: throw CsvParsingException("Topic is missing"),
+        try {
+            val speeches = records.map {
+                val speech = Speech(
+                    speaker = it.get("Speaker"),
+                    topic = it.get("Topic"),
                     date = LocalDate.parse(it.get(SpeechHeader.DATE.value), DATE_TIME_FORMATTER),
-                    wordCount = it.get("Words").toInt() ?: throw CsvParsingException("Words count is missing")
+                    wordCount = it.get("Words").toInt()
                 )
-            }
+                ValidationUtil.validateSpeech(speech)
+                speech
+            }.toList()
+            return speeches
         } catch (ex: Exception) {
-            throw EvaluationServiceException(ErrorCode.CSV_PARSER_ERROR, ex)
+            when (ex) {
+                is CsvParsingException -> {
+                    log.error(ex.message, ex.cause)
+                    throw ex
+                }
+                else -> {
+                    log.error(ex.message, ex.cause)
+                    throw EvaluationServiceException(ex.message)
+                }
+            }
         }
     }
-
 }
 

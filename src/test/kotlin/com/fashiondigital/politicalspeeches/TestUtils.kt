@@ -17,10 +17,12 @@ object TestUtils {
     const val  VALID_SPEECHES_1 = "data/valid-speeches-1.csv"
     const val  VALID_SPEECHES_2 = "data/valid-speeches-2.csv"
     const val  INVALID_SPEECHES_DELIMITER = "data/invalid-speeches-delimiter.csv"
+    const val  INVALID_COLUMN = "data/invalid-column.csv"
     const val  INVALID_SPEECHES_EMPTY = "data/invalid-speeches-empty.csv"
     const val  INVALID_SPEECHES_DATE = "data/invalid-speeches-date.csv"
     const val  INVALID_SPEECHES_MINUS_WORDS = "data/invalid-speeches-minus.csv"
-    
+    const val  INVALID_SPEECHES_MISSING_TOPIC = "data/invalid-speeches-missing_topic.csv"
+
 
     fun zerFieldSpeechs(): List<Speech> {
         return listOf()

@@ -7,8 +7,6 @@ data class Speech(
     val speaker: String,
     val topic: String,
     val date: LocalDate,
-    var wordCount: Int = 0
+    var wordCount: Int = 0,
 ) {
-
-
 }

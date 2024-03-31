@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.web.client.RestTemplate
 
@@ -30,12 +31,15 @@ class HttpClientIntegrationTest {
     @Autowired
     private val evaluationService = EvaluationService()
 
+    @Value("\${csv.server.address}")
+    private val serverAddress: String? = null
+
 
     @Test
     fun `test successful CSV download and processing`() = runBlocking {
         val urls = listOf(
-            "http://localhost:81/valid-speeches-1.csv",
-            "http://localhost:81/valid-speeches-2.csv"
+            "${serverAddress}/valid-speeches-1.csv",
+            "${serverAddress}/valid-speeches-2.csv"
         )
 
         val allSpeeches = urls.flatMap { url ->
@@ -53,7 +57,7 @@ class HttpClientIntegrationTest {
 
     @Test
     fun `test CSV download failure`() = runBlocking {
-        val invalidUrl = "http://localhost:81/invalid-url"
+        val invalidUrl = "${serverAddress}/invalid-url"
 
         val exception = assertThrows<EvaluationServiceException> {
             httpClient.getHttpCSVResponse(invalidUrl)

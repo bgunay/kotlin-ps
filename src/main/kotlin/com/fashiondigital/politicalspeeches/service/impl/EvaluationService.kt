@@ -3,6 +3,8 @@ package com.fashiondigital.politicalspeeches.service.impl
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
 import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.service.IEvaluationService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service
 class EvaluationService : IEvaluationService {
 
 
+    private val log: Logger = LoggerFactory.getLogger(EvaluationService::class.java)
+
     @Value("\${speech.target-year}")
     private val targetYear = 0
 
@@ -18,6 +22,7 @@ class EvaluationService : IEvaluationService {
     private val securityTopic: String? = null
 
     override fun analyzeSpeeches(speeches: List<Speech>): EvaluationResult {
+        log.info("Analyzing Speeches")
         val mostSpeeches = findUniqueMax(speeches.filter { it.date.year == targetYear }, Speech::speaker)
         val mostSecurity = findUniqueMax(speeches.filter { it.topic == securityTopic }, Speech::speaker)
         val leastWordy = findUniqueMin(speeches, Speech::speaker)
