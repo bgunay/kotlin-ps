@@ -8,8 +8,8 @@ import com.fashiondigital.politicalspeeches.model.SpeechHeader
 import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import com.fashiondigital.politicalspeeches.util.CSVUtil
 import com.fashiondigital.politicalspeeches.util.HttpClient
+import com.fashiondigital.politicalspeeches.validation.ValidationUtil
 import org.apache.commons.csv.CSVParser
-import org.apache.logging.log4j.util.Strings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -23,24 +23,20 @@ import java.util.*
 class CsvParserService(@Autowired val httpClient: HttpClient) : ICsvParserService {
 
     companion object {
-        val DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.ENGLISH)
+        val DATE_TIME_FORMATTER: DateTimeFormatter =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.ENGLISH)
     }
 
 
     //return <Speaker, Stats>
     override fun parseCSVsByUrls(urls: Set<String>): List<Speech> {
-        if(urls.isEmpty())
-            throw EvaluationServiceException(ErrorCode.URL_READER_ERROR)
-
-        val stats = mutableListOf<Speech>()
+        val speeches = mutableListOf<Speech>()
         urls.forEach {
             val response: ResponseEntity<String?> = httpClient.getHttpCSVResponse(it)
-            if (response.hasBody() && !Strings.isEmpty(response.body)    ) {
-                stats.addAll(parseCSV(response.body!!))
-            } else
-                throw EvaluationServiceException(ErrorCode.CSV_EMPTY_BODY_ERROR)
+            ValidationUtil.checkCsvValid(response)
+            speeches.addAll(parseCSV(response.body!!))
         }
-        return stats
+        return speeches
     }
 
 
@@ -49,6 +45,7 @@ class CsvParserService(@Autowired val httpClient: HttpClient) : ICsvParserServic
         val csvFormat = CSVUtil.setCVSFormat()
         val csvParser = CSVParser.parse(csvData!!.byteInputStream(), StandardCharsets.UTF_8, csvFormat)
         val records = csvParser.records
+        ValidationUtil.checkWordCounts(records)
         return try {
             records.map {
                 Speech(

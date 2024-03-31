@@ -23,7 +23,7 @@ object TestUtils {
     
 
     fun zerFieldSpeechs(): List<Speech> {
-        return listOf<Speech>()
+        return listOf()
     }
 
     fun getResourceContent(path: String): String {
@@ -86,97 +86,5 @@ object TestUtils {
         )
     )
 
-
-    val invalidNumberFormatCsv = listOf(
-        Speech(
-            "Alexander Abel",
-            "education policy",
-            LocalDate.parse("2012-10-30", CsvParserService.DATE_TIME_FORMATTER),
-            5310
-        ),
-        Speech(
-            "Bernhard Belling",
-            "coal subsidies",
-            LocalDate.parse("2012-11-05", CsvParserService.DATE_TIME_FORMATTER),
-            1210
-        ),
-        Speech(
-            "Caesare Collins",
-            "coal subsidies",
-            LocalDate.parse("2012-11-06", CsvParserService.DATE_TIME_FORMATTER),
-            0
-        ),
-        Speech(
-            "Alexander Abel",
-            "homeland security",
-            LocalDate.parse("2012-12-11", CsvParserService.DATE_TIME_FORMATTER),
-            911
-        )
-    )
-
-    val invalidSpeechesDateCsv = listOf(
-        Speech(
-            "Alexander Abel",
-            "education policy",
-            LocalDate.parse("2012-10-30", CsvParserService.DATE_TIME_FORMATTER),
-            5310
-        ),
-        Speech(
-            "Bernhard Belling",
-            "coal subsidies",
-            LocalDate.parse("2012-11-05", CsvParserService.DATE_TIME_FORMATTER),
-            1210
-        ),
-        Speech(
-            "Caesare Collins",
-            "coal subsidies",
-            LocalDate.parse("2012-11-06", CsvParserService.DATE_TIME_FORMATTER),
-            1119
-        ),
-        Speech(
-            "Alexander Abel",
-            "homeland security",
-            LocalDate.parse("2012-12-11", CsvParserService.DATE_TIME_FORMATTER),
-            911
-        )
-    )
-
-    val invalidSpeechesDelimiterCsv = listOf(
-        Speech(
-            "Alexander Abel",
-            "education policy",
-            LocalDate.parse("2012-10-30", CsvParserService.DATE_TIME_FORMATTER),
-            5310
-        )
-    )
-
-    val invalidSpeechesEmptyCsv = emptyList<Speech>()
-
-    val invalidSpeechesMinusCsv = listOf(
-        Speech(
-            "Alexander Abel",
-            "education policy",
-            LocalDate.parse("2012-10-30", CsvParserService.DATE_TIME_FORMATTER),
-            0
-        ),
-        Speech(
-            "Bernhard Belling",
-            "coal subsidies",
-            LocalDate.parse("2012-11-05", CsvParserService.DATE_TIME_FORMATTER),
-            -1210
-        ),
-        Speech(
-            "Caesare Collins",
-            "coal subsidies",
-            LocalDate.parse("2012-11-06", CsvParserService.DATE_TIME_FORMATTER),
-            -1119
-        ),
-        Speech(
-            "Alexander Abel",
-            "homeland security",
-            LocalDate.parse("2012-12-11", CsvParserService.DATE_TIME_FORMATTER),
-            -100
-        )
-    )
 
 }

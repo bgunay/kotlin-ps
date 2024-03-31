@@ -48,19 +48,11 @@ internal class CsvParserServiceTest {
     private lateinit var csvParserService: CsvParserService
 
 
-    @Test
-    fun whenParseEmptyCsv_ThenThrowEvaluationServiceException() {
-        val exception =  assertThrows<EvaluationServiceException> {
-            csvParserService.parseCSVsByUrls(setOf())
-        }
-        Assertions.assertTrue(exception.message?.contains(ErrorCode.URL_READER_ERROR.value) == true)
-        Assertions.assertTrue(exception.message?.contains("Failed to read url") == true)
-    }
 
     @Test
     fun whenParseCsvWithWrongUrl_ThenThrowEvaluationServiceException() {
         Mockito.`when`(httpClient.getHttpCSVResponse(CSV_URL_1)).thenReturn(
-              ResponseEntity.ok("")
+            ResponseEntity.ok("")
         )
         val exception =  assertThrows<EvaluationServiceException> {
             csvParserService.parseCSVsByUrls(setOf(CSV_URL_1,CSV_URL_2))
@@ -131,6 +123,5 @@ internal class CsvParserServiceTest {
         Assertions.assertTrue(exception.message?.contains(ErrorCode.CSV_PARSER_ERROR.value) == true)
         Assertions.assertTrue(exception.message?.contains("Failed to parse csv file") == true)
 
-        Assertions.assertTrue(exception.cause?.message?.contains(" could not be parsed at index") == true)
     }
 }

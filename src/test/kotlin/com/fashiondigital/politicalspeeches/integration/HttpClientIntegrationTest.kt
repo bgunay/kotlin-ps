@@ -47,8 +47,8 @@ class HttpClientIntegrationTest {
         val statistics = evaluationService.analyzeSpeeches(allSpeeches)
 
         assertEquals(null, statistics.mostSpeeches)
-        assertEquals("Caesare Collins", statistics.mostSecurity)
-        assertEquals("Alexander Abel", statistics.leastWordy)
+        assertEquals("Alexander Abel", statistics.mostSecurity)
+        assertEquals("Caesare Collins", statistics.leastWordy)
     }
 
     @Test

@@ -3,6 +3,9 @@ package com.fashiondigital.politicalspeeches.validation
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.constants.Constants
+import org.apache.commons.csv.CSVRecord
+import org.apache.logging.log4j.util.Strings
+import org.springframework.http.ResponseEntity
 import java.net.URL
 
 
@@ -42,5 +45,24 @@ object ValidationUtil {
         }
     }
 
+    fun checkCsvValid(response: ResponseEntity<String?>): Boolean {
+        if (!response.hasBody() || Strings.isEmpty(response.body)) {
+            throw EvaluationServiceException(ErrorCode.CSV_EMPTY_BODY_ERROR)
+        }
+        if(response.hasBody() && response.body!!.contains(",")  ){
+            throw EvaluationServiceException(ErrorCode.CSV_PARSER_ERROR)
+        }
+
+        return true
+    }
+
+    fun checkWordCounts(records: List<CSVRecord>) {
+        records.forEach {
+            val wordCount = it.get("Words").toInt()
+            if (wordCount < 0) {
+                throw EvaluationServiceException(ErrorCode.CSV_PARSER_ERROR)
+            }
+        }
+    }
 
 }
