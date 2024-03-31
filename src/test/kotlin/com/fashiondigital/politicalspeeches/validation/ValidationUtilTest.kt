@@ -1,12 +1,11 @@
 package com.fashiondigital.politicalspeeches.validation
 
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
-import com.fashiondigital.politicalspeeches.validation.UrlHeaderValidation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class UrlHeaderValidationTest{
+class ValidationUtilTest{
     @Test
     fun `given a request with valid URL headers, when the function is called, then it should return the URLs as a set`() {
         // given
@@ -17,7 +16,7 @@ class UrlHeaderValidationTest{
         )
 
         // when
-        val result = UrlHeaderValidation.extractAndValidateUrlsFromRequest(headers)
+        val result = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
 
         // then
         assertThat(result).contains(*headers.values.toTypedArray())
@@ -34,7 +33,7 @@ class UrlHeaderValidationTest{
 
         // when and then
         assertThrows<EvaluationServiceException> {
-            UrlHeaderValidation.extractAndValidateUrlsFromRequest(headers)
+            ValidationUtil.extractAndValidateUrlsFromRequest(headers)
         }
     }
 
@@ -45,7 +44,7 @@ class UrlHeaderValidationTest{
 
         // when and then
         assertThrows<EvaluationServiceException> {
-            UrlHeaderValidation.extractAndValidateUrlsFromRequest(headers)
+            ValidationUtil.extractAndValidateUrlsFromRequest(headers)
         }
     }
 }

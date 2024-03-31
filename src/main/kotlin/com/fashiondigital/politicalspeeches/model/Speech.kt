@@ -9,8 +9,6 @@ data class Speech(
     val date: LocalDate,
     var wordCount: Int = 0
 ) {
-    init {
-        require(wordCount > 0)
-    }
+
 
 }
