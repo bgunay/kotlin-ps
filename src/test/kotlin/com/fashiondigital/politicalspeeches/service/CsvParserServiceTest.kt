@@ -32,8 +32,6 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.web.client.RestTemplate
 
 
-@Import(AppConfig::class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ExtendWith(MockitoExtension::class)
 internal class CsvParserServiceTest {
 

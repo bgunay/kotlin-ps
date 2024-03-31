@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
     @ExceptionHandler(EvaluationServiceException::class)
     fun handleException(ex: EvaluationServiceException): ResponseEntity<ErrorMessageModel> {
-        val errorMessageModel: ErrorMessageModel = ErrorMessageModel(
+        val errorMessageModel = ErrorMessageModel(
                 errorCode = ex.errorCode,
                 errorMessage = ex.message)
         return ResponseEntity<ErrorMessageModel>(errorMessageModel, HttpStatus.BAD_REQUEST)
