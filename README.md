@@ -21,8 +21,7 @@ Second Step (Or you can run from runnable classes)
 gradlew bootRun
 ```
 
-## Usage 
-### Evaluating Speeches
+## Usage
 The application exposes a GET endpoint `/evaluation` that accepts CSV file URLs as query parameters (e.g., `/evaluation?url1=link_to_csv1&url2=link_to_csv2`). It processes these CSV files to answer questions like which politician gave the most speeches in a specific year, who spoke most about homeland security, and who was the least wordy.
 
 
@@ -44,7 +43,8 @@ http://localhost:8080/swagger-ui/index.html
 http://localhost:8080/v3/api-docs
 ```
 
-- Postman workspace (collection) containing request with public csv urls (Linkes may not work, use request in local id recommended
+- Postman workspace (collection) containing request with public csv urls 
+- Google Drive links may not work, serving in your local or cloud storage recommended
 ```
 https://www.postman.com/bgunay1/workspace/public-workspace/collection/1152813-9c321f49-1a3a-4189-841b-e4ead905e850?action=share&creator=1152813
 ```
