@@ -1,6 +1,7 @@
 package com.fashiondigital.politicalspeeches.controller
 
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
+import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import com.fashiondigital.politicalspeeches.service.IEvaluationService
 import com.fashiondigital.politicalspeeches.validation.UrlHeaderValidation
 import io.swagger.v3.oas.annotations.Operation
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Tag(name = "political-speech", description = "political-speech")
-class EvaluationController(@Autowired val evaluationService: IEvaluationService) {
+class EvaluationController(
+    @Autowired val evaluationService: IEvaluationService,
+    @Autowired val csvParserService: ICsvParserService) {
 
 
     @GetMapping("evaluate")
@@ -31,7 +34,8 @@ class EvaluationController(@Autowired val evaluationService: IEvaluationService)
     fun evaluate(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> {
         //Only valid if params are like "url1=address,url2=address,urlN..."
         val urlParams: Set<String> = UrlHeaderValidation.extractAndValidateUrlsFromRequest(headers)
-        val result: EvaluationResult = evaluationService.evaluate(urlParams)
+        val speeches = csvParserService.parseCSVsByUrls(urlParams)
+        val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
         return ResponseEntity.ok(result)
     }
 }

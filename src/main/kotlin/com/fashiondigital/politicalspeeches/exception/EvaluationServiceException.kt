@@ -14,3 +14,5 @@ class EvaluationServiceException : RuntimeException {
         this.errorCode = errorCode
     }
 }
+
+class CsvParsingException(s: String) : Throwable()

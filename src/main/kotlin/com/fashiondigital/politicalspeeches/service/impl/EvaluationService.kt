@@ -1,72 +1,43 @@
 package com.fashiondigital.politicalspeeches.service.impl
 
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
-import com.fashiondigital.politicalspeeches.model.SpeakerStats
-import com.fashiondigital.politicalspeeches.service.ICsvParserService
+import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.service.IEvaluationService
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 
 @Service
-class EvaluationService(@Autowired val csvParserService: ICsvParserService) : IEvaluationService {
-    override fun evaluate(urls: Set<String>): EvaluationResult {
-        val speakerStatsMap = csvParserService.parseCSVsByUrls(urls)
+class EvaluationService : IEvaluationService {
+
+
+    @Value("\${speech.target-year}")
+    private val targetYear = 0
+
+    @Value("\${speech.security-topic}")
+    private val securityTopic: String? = null
+
+    override fun analyzeSpeeches(speeches: List<Speech>): EvaluationResult {
+        val mostSpeeches = findUniqueMax(speeches.filter { it.date.year == targetYear }, Speech::speaker)
+        val mostSecurity = findUniqueMax(speeches.filter { it.topic == securityTopic }, Speech::speaker)
+        val leastWordy = findUniqueMin(speeches, Speech::speaker)
+
         return EvaluationResult(
-            mostSpeeches = findSpeakerByMostSpeeches(speakerStatsMap),
-            mostSecurity = findSpeakerByMostSecuritySpeeches(speakerStatsMap),
-            leastWordy = findSpeakerByLeastWordySpeeches(speakerStatsMap)
+            mostSpeeches = mostSpeeches,
+            mostSecurity = mostSecurity,
+            leastWordy = leastWordy
         )
     }
 
-    private fun findSpeakerByMostSpeeches(speakerStatsMap: Map<String, SpeakerStats>): String? {
-        var speaker: String? = null
-        var count = 0
-        var max = 0
-        for (spkr in speakerStatsMap.keys) {
-            if (speakerStatsMap[spkr]?.targetYearSpeeches!! > max) {
-                max = speakerStatsMap[spkr]?.targetYearSpeeches!!
-                speaker = spkr
-                count = 1
-            } else if (speakerStatsMap[spkr]?.targetYearSpeeches!! == max) {
-                count += 1 //multiple speakers with same speech-count
-            }
-        }
-        //return a unique speaker Otherwise it is null.
-        return if (count == 1) speaker else null
+    fun findUniqueMax(speeches: List<Speech>, selector: (Speech) -> String): String? {
+        val counts = speeches.groupingBy(selector).eachCount()
+        val maxCount = counts.maxByOrNull { it.value }?.value
+        return counts.filterValues { it == maxCount }.keys.singleOrNull()
     }
 
-    private fun findSpeakerByMostSecuritySpeeches(speakerStatsMap: Map<String, SpeakerStats>): String? {
-        var speaker: String? = null
-        var count = 0
-        var max = 0
-        for (spkr in speakerStatsMap.keys) {
-            if (speakerStatsMap[spkr]?.securitySpeeches!! > max) {
-                max = speakerStatsMap[spkr]?.securitySpeeches!!
-                speaker = spkr
-                count = 1
-            } else if (speakerStatsMap[spkr]?.securitySpeeches!! == max) {
-                count += 1 //multiple speakers with same speech-count
-            }
-        }
-        //return a unique speaker Otherwise it is null.
-        return if (count == 1) speaker else null
-    }
-
-    private fun findSpeakerByLeastWordySpeeches(speakerStatsMap: Map<String, SpeakerStats>): String? {
-        var speaker: String? = null
-        var count = 0
-        var min = Int.MAX_VALUE
-        for (spkr in speakerStatsMap.keys) {
-            if (speakerStatsMap[spkr]?.overallWords!! < min) {
-                min = speakerStatsMap[spkr]?.overallWords!!
-                speaker = spkr
-                count = 1
-            } else if (speakerStatsMap[spkr]?.overallWords!! == min) {
-                count += 1 //multiple speakers with same word-count
-            }
-        }
-        //return a unique speaker Otherwise it is null.
-        return if (count == 1) speaker else null
+    private fun findUniqueMin(speeches: List<Speech>, selector: (Speech) -> String): String? {
+        val totalWords = speeches.groupingBy(selector).fold(0) { acc, speech -> acc + speech.wordCount }
+        val minWords = totalWords.minByOrNull { it.value }?.value
+        return totalWords.filterValues { it == minWords }.keys.singleOrNull()
     }
 }

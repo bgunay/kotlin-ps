@@ -3,10 +3,12 @@ package com.fashiondigital.politicalspeeches.controller
 import com.fashiondigital.politicalspeeches.exception.GlobalExceptionHandler
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
+import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import com.fashiondigital.politicalspeeches.service.IEvaluationService
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers.anyList
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient
@@ -22,10 +24,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 @AutoConfigureWebClient
 @Import(GlobalExceptionHandler::class)
 @WebMvcTest(controllers = [EvaluationController::class])
-internal class EvaluationControllerTest(@Autowired private val mockMvc: MockMvc) {
+internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc) {
 
     @MockBean
     private lateinit var evaluationService: IEvaluationService
+
+    @MockBean
+    private lateinit var csvParserService: ICsvParserService
 
     companion object {
         private const val URL = "http://localhost:81/"
@@ -36,10 +41,11 @@ internal class EvaluationControllerTest(@Autowired private val mockMvc: MockMvc)
         )
     }
 
+
     @Test
     @Throws(Exception::class)
     fun evaluate_success() {
-        Mockito.`when`(evaluationService.evaluate(setOf(URL))).thenReturn(EVALUATION_RESULT)
+        Mockito.`when`(evaluationService.analyzeSpeeches(anyList())).thenReturn(EVALUATION_RESULT)
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", URL))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.mostSpeeches", Matchers.`is`("A")))
@@ -50,7 +56,7 @@ internal class EvaluationControllerTest(@Autowired private val mockMvc: MockMvc)
     @Test
     @Throws(Exception::class)
     fun evaluate_withNotAvailableParam_failed() {
-        Mockito.`when`(evaluationService.evaluate(setOf(URL))).thenReturn(EVALUATION_RESULT)
+        Mockito.`when`(evaluationService.analyzeSpeeches(anyList())).thenReturn(EVALUATION_RESULT)
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("abc", URL))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect { result: MvcResult -> assertEquals(ErrorCode.URL_PARAM_REQUIRED_ERROR.value, result.resolvedException!!.message) }
@@ -59,7 +65,7 @@ internal class EvaluationControllerTest(@Autowired private val mockMvc: MockMvc)
     @Test
     @Throws(Exception::class)
     fun evaluate_withNotValidUrl_failed() {
-        Mockito.`when`(evaluationService.evaluate(setOf("abc"))).thenReturn(EVALUATION_RESULT)
+        Mockito.`when`(evaluationService.analyzeSpeeches(anyList())).thenReturn(EVALUATION_RESULT)
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", "abc"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect { result: MvcResult -> assertEquals(ErrorCode.URL_VALIDATION_ERROR.value, result.resolvedException!!.message) }

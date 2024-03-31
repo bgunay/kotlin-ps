@@ -17,7 +17,7 @@ class OpenApiConfig {
                 Info()
                     .title("Politicians Speeches API")
                     .contact(Contact().name("burhan").url("bgunay@github.com"))
-                    .version("V1")
+                    .version("V2")
                     .description("This is the API documentation for Politicians Speeches.")
             )
     }

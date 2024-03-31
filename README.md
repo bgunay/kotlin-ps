@@ -8,7 +8,7 @@ Process statistics about political speeches.
 - 
 ### Important Note:
 - Two projects implemented, V1 and V2 (github branches)
-- They have small differences. V2 is done for simplicity in some cases.
+- The main branch is V2.
 
 
 
@@ -18,8 +18,7 @@ First Step:
 gradle build
 
 Second Step (Or you can run from runnable classes)
-(Branch) V1: gradlew bootRun
-(Branch) V2: gradle run
+gradlew bootRun
 ```
 
 ## Usage 
@@ -57,30 +56,24 @@ Swagger Request View:
 -  ![img.png](img.png)
 - 
 ### Restrictions
-- Url format should be `/evaluate?url1=...&url2=...&urln=...` Other query-params will be ignored. (V1)
+- Url format should be `/evaluate?url1=...&url2=...&urln=...` Other query-params will be ignored.
 - Url schema should be `http` or `https`. Other protocols (`file`, `ftp`...) give error.
 - CSV file schema should be `Speaker ; Topic ; Date ; Words` And all fields are required (not-null)
 - Date format should be `yyyy-MM-dd`. Other formats give parser error.
 - `Words` should be greater than `0`
+- 
 ## Architecture
 * HttpClient: Custom client for handling HTTP requests to download CSV files.
 * CsvParser: Parses CSV data into Speech objects.
 * SpeechService: Analyzes the speeches and computes the statistics.
 * SpeechRoute: Manages the API route for handling requests to the /evaluation endpoint.
 
-
-
-## Architecture
-* HttpClient: Custom client for handling HTTP requests to download CSV files.
-* CsvParser: Parses CSV data into Speech objects.
-* SpeechService: Analyzes the speeches and computes the statistics.
-* SpeechRoute: Manages the API route for handling requests to the /evaluation endpoint.
 
 ## Thought Process and Decisions
 * Modular Architecture: The project adopts a modular design for ease of maintenance and scalability. Each module, like HttpClient, CsvParser, and SpeechService, is responsible for a specific aspect of the application, ensuring separation of concerns.
 * Custom HTTP Client: Instead of using a third-party library, a custom HTTP client was implemented using Ktor's CIO engine. This decision was made to have finer control over the HTTP requests and to tailor error handling specific to the application's needs, especially for CSV file downloads.
 * CSV Parsing Strategy: The CsvParser was designed to transform CSV data into Speech objects. This approach was chosen for its simplicity and efficiency, allowing the application to directly process the structured CSV data.
-* Versioning code with V1 and V2, V1 is former, in V2 some of the ambiguities were removed, more cleaner code was added and flow changed.
+* V1 is first implemented, in V2 some of the ambiguities  were removed, separation of concerns implemented cleaner, flow is changed.
 
 ## Algorithms
 * Speech Analysis: The core analysis algorithms reside in the SpeechService. These algorithms focus on grouping and aggregating speech data to derive meaningful statistics.
