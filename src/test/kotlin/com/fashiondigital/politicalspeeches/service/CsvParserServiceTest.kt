@@ -15,6 +15,7 @@ import com.fashiondigital.politicalspeeches.TestUtils.SPEAKER_2
 import com.fashiondigital.politicalspeeches.TestUtils.SPEAKER_3
 import com.fashiondigital.politicalspeeches.TestUtils.VALID_SPEECHES_1
 import com.fashiondigital.politicalspeeches.TestUtils.VALID_SPEECHES_2
+import com.fashiondigital.politicalspeeches.exception.CsvPHttpException
 import com.fashiondigital.politicalspeeches.exception.CsvParsingException
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
@@ -25,9 +26,11 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.http.ResponseEntity
+import org.springframework.test.util.ReflectionTestUtils
 
 
 internal class CsvParserServiceTest {
@@ -36,6 +39,13 @@ internal class CsvParserServiceTest {
 
     private var csvParserService = CsvParserService()
     private var csvHttpService = CsvHttpService(httpClientMock)
+
+
+   @BeforeEach
+   fun setUp() {
+       ReflectionTestUtils.setField(csvHttpService, "fetchCsvTimeout", 2000L)
+   }
+
 
     @Test
     fun parseCSVsByUrls_withValidSingleUrl_success() {
@@ -140,5 +150,21 @@ internal class CsvParserServiceTest {
         }
 
         exception.message?.contains("expected one of [Date, Invalid Column, Topic, Words")?.let { assertTrue(it) }
+    }
+
+    @Test
+    fun parseCSVsByUrls_timeoutExceed_failed() {
+        val response = ResponseEntity.ok(TestUtils.getResourceContent(VALID_SPEECHES_1))
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } answers { response
+            Thread.sleep(3000)
+              response
+        }
+
+        val exception = assertThrows<CsvPHttpException> {
+            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            csvParserService.parseCSV(parseUrlsAndFetchCsvData)
+        }
+
+        exception.message?.contains(ErrorCode.FETCH_CSV_TIMEOUT.value)?.let { assertTrue(it) }
     }
 }

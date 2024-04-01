@@ -30,3 +30,5 @@ class CsvParsingException : RuntimeException {
         this.errorCode = errorCode
     }
 }
+
+class CsvPHttpException(val errorCode: ErrorCode) : RuntimeException(errorCode.value)

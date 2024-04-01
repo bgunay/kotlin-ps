@@ -1,8 +1,7 @@
 package com.fashiondigital.politicalspeeches.service.impl
 
-import com.fashiondigital.politicalspeeches.exception.CsvParsingException
+import com.fashiondigital.politicalspeeches.exception.CsvPHttpException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
-import com.fashiondigital.politicalspeeches.model.constants.Constants
 import com.fashiondigital.politicalspeeches.service.ICsvHttpService
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
@@ -21,9 +20,8 @@ class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
     private val log: Logger = LoggerFactory.getLogger(CsvHttpService::class.java)
 
 
-
     @Value("\${fetch.csv.timeout}")
-    private val fetchCsvTimeout = 0L
+    private val fetchCsvTimeout: Long = 0
 
     //return <Speaker>
     override fun parseUrlsAndFetchCsvData(urls: Set<String>): List<String?> {
@@ -31,6 +29,7 @@ class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
         val csvContents: List<ResponseEntity<String?>>
         runBlocking {
             try {
+                log.info("timeout {}",fetchCsvTimeout)
                 csvContents = withTimeout(fetchCsvTimeout) {
                     urls.map { url ->
                         async { httpClient.getHttpCSVResponse(url) }
@@ -40,7 +39,7 @@ class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
 
             } catch (ex: TimeoutCancellationException) {
                 log.error(ErrorCode.FETCH_CSV_TIMEOUT.value)
-                throw CsvParsingException(ErrorCode.FETCH_CSV_TIMEOUT)
+                throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT)
             }
         }
         return csvContents.map { it.body }
