@@ -39,14 +39,12 @@ class CsvParserService(@Autowired val httpClient: HttpClient) : ICsvParserServic
         var speeches = listOf<Speech>()
         log.info("parsing ${urls.size} urls started")
         runBlocking {
-            coroutineScope {
                 val csvContents = urls.map { url ->
                     async { httpClient.getHttpCSVResponse(url) }
                 }.awaitAll()
 
                 ValidationUtil.checkCsvResponsesValid(csvContents)
                 speeches = parseCSV(csvContents.map { it.body})
-            }
         }
         return speeches
     }
