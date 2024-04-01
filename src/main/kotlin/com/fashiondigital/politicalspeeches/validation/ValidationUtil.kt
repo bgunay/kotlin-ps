@@ -5,6 +5,7 @@ import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.model.constants.Constants
+import com.fashiondigital.politicalspeeches.model.constants.Constants.URL_HEADER_PATTERN
 import org.apache.logging.log4j.util.Strings
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,8 +21,10 @@ object ValidationUtil {
     fun extractAndValidateUrlsFromRequest(headers: Map<String, String>): Set<String> {
         val result: MutableSet<String> = HashSet()
         for (key in headers.keys) {
-            val m = Constants.URL_HEADER_PATTERN.matcher(key)
-            if (m.find() && isValidURL(headers[key])) {
+            if (!key.startsWith(URL_HEADER_PATTERN)) {
+                throw EvaluationServiceException(ErrorCode.URL_PARAM_REQUIRED_ERROR)
+            }
+            if (isValidURL(headers[key])) {
                 result.add(headers[key]!!)
             }
         }

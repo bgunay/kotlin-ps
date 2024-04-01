@@ -1,9 +1,7 @@
 package com.fashiondigital.politicalspeeches.model.constants
 
-import java.util.regex.Pattern
-
 object Constants {
     val SUPPORTED_PROTOCOLS = setOf("http", "https")
-    val URL_HEADER_PATTERN: Pattern = Pattern.compile("url\\d+")
+    const val URL_HEADER_PATTERN = "url"
 
 }
