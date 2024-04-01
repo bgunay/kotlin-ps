@@ -2,7 +2,6 @@ package com.fashiondigital.politicalspeeches.service.impl
 
 import com.fashiondigital.politicalspeeches.exception.CsvParsingException
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
-import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.model.SpeechHeader
 import com.fashiondigital.politicalspeeches.service.ICsvParserService
@@ -54,10 +53,10 @@ class CsvParserService(@Autowired val httpClient: HttpClient) : ICsvParserServic
         try {
             val speeches = records.map {
                 val speech = Speech(
-                    speaker = it.get("Speaker"),
-                    topic = it.get("Topic"),
+                    speaker = it.get(SpeechHeader.SPEAKER.value),
+                    topic = it.get(SpeechHeader.TOPIC.value),
                     date = LocalDate.parse(it.get(SpeechHeader.DATE.value), DATE_TIME_FORMATTER),
-                    wordCount = it.get("Words").toInt()
+                    wordCount = it.get(SpeechHeader.WORDS.value).toInt()
                 )
                 ValidationUtil.validateSpeech(speech)
                 speech
