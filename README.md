@@ -72,7 +72,6 @@ Swagger Request View:
 * CsvParserService: Parses CSV data into Speech objects.
 * EvaluationService: Analyzes the speeches and computes the statistics.
 * CsvHttpService: Uses httpClient and fetches CSV data asynchronously
-* SpeechRoute: Manages the API route for handling requests to the /evaluation endpoint.
 
 
 ## Thought Process and Decisions
