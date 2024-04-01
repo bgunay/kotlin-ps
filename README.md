@@ -6,50 +6,43 @@ Process statistics about political speeches.
 ### Configuration
 - You can change variables from `application.properties` under resources
 - 
-### Important Note:
-- Two projects implemented, V1 and V2 (github branches)
-- The main branch is V2.
-
-
 
 ### To run project
 ```
-First Step: 
-gradle build
+Build it:
+./gradlew build
 
-Second Step (Or you can run from runnable classes)
-gradlew bootRun
+Execute the tests:
+./gradlew test
+
+Run it (locally):
+./gradlew bootRun
 ```
 
 ## Usage
 The application exposes a GET endpoint `/evaluation` that accepts CSV file URLs as query parameters (e.g., `/evaluation?url1=link_to_csv1&url2=link_to_csv2`). It processes these CSV files to answer questions like which politician gave the most speeches in a specific year, who spoke most about homeland security, and who was the least wordy.
 
 
-### To run tests
-```
-gradlew test
-
-* !! For integration test to success,  change csv.server.address" property where you host CSV files
-```
+### !!Important note about test
+* For integration test to success, change csv.server.address" property in application.properties to where you host your CSV files
 
 ### Endpoint
 ```
 GET /evaluate?url1=https://example.com/valid-speeches-1.csv
 Host: localhost:8080
 
-- Yuu can use nginx easily for host static files
+- Tip: Yuu can use nginx easily for host static files
 ```
 ### Swagger and ApiDoc addresses:
-```
-http://localhost:8080/swagger-ui/index.html
-http://localhost:8080/v3/api-docs
-```
+[Swagger UI](http://localhost:8080/swagger-ui/index.html)
+
+[Api Documentation](http://localhost:8080/v3/api-docs)
+
 
 - Postman workspace (collection) containing request with public csv urls 
 - Google Drive links may not work, serving in your local or cloud storage recommended
-```
-https://www.postman.com/bgunay1/workspace/public-workspace/collection/1152813-9c321f49-1a3a-4189-841b-e4ead905e850?action=share&creator=1152813
-```
+[Postman URL](https://www.postman.com/bgunay1/workspace/public-workspace/request/1152813-947921c1-691a-4d43-b70a-3284e0d0ada5)
+
 ## Screenshots
 - ![img_1.png](screenshots/img_postman.png)
 
