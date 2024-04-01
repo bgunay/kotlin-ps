@@ -2,6 +2,8 @@ package com.fashiondigital.politicalspeeches.util
 
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
@@ -16,10 +18,12 @@ class HttpClient{
     @Autowired
     lateinit var restTemplate: RestTemplate
 
-    fun getHttpCSVResponse(url: String): ResponseEntity<String?> {
+   suspend fun getHttpCSVResponse(url: String): ResponseEntity<String?> {
         val response: ResponseEntity<String?>
         try {
-            response = restTemplate.exchange(url, HttpMethod.GET, null, String::class.java)
+            response = withContext(Dispatchers.IO) {
+                restTemplate.exchange(url, HttpMethod.GET, null, String::class.java)
+            }
         } catch (ex: RestClientException) {
             throw EvaluationServiceException(ErrorCode.URL_READER_ERROR, ex)
         }

@@ -54,18 +54,6 @@ object ValidationUtil {
         }
     }
 
-    fun checkCsvValid(response: ResponseEntity<String?>): Boolean {
-        if (!response.hasBody() || Strings.isEmpty(response.body)) {
-            log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value)
-            throw CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
-        }
-        if (response.hasBody() && response.body!!.contains(",")) {
-            log.error(ErrorCode.WRONG_DELIMITER_CSV.value)
-            throw CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
-        }
-
-        return true
-    }
 
     fun validateSpeech(speech: Speech) {
         if (speech.wordCount < 0) {
@@ -80,6 +68,20 @@ object ValidationUtil {
             log.error(ErrorCode.SPEAKER_MISSING.value)
             throw CsvParsingException(ErrorCode.SPEAKER_MISSING)
         }
+    }
+
+    fun checkCsvResponsesValid(csvContents: List<ResponseEntity<String?>>) {
+        csvContents.forEach{ response ->
+            if (!response.hasBody() || Strings.isEmpty(response.body)) {
+                log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value)
+                throw CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
+            }
+            if (response.hasBody() && response.body!!.contains(",")) {
+                log.error(ErrorCode.WRONG_DELIMITER_CSV.value)
+                throw CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
+            }
+        }
+
     }
 
 }

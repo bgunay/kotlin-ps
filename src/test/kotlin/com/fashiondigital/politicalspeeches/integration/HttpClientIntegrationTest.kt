@@ -13,21 +13,18 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.web.client.RestTemplate
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class HttpClientIntegrationTest {
 
-    @Autowired
-    private lateinit var restTemplate: RestTemplate
 
     @Autowired
     private lateinit var csvParserService: CsvParserService
 
-
     @Autowired
     private val httpClient = HttpClient()
+
     @Autowired
     private val evaluationService = EvaluationService()
 
@@ -44,7 +41,7 @@ class HttpClientIntegrationTest {
 
         val allSpeeches = urls.flatMap { url ->
             val csvContent = httpClient.getHttpCSVResponse(url).body
-            val parseCSV = csvParserService.parseCSV(csvContent)
+            val parseCSV = csvParserService.parseCSV(mutableListOf(csvContent))
             parseCSV
         }
 

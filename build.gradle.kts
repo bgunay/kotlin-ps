@@ -36,6 +36,9 @@ dependencies {
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
 
+	runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+
+
 	testImplementation ("io.mockk:mockk:1.9.3")
 
 
