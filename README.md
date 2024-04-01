@@ -65,18 +65,20 @@ Swagger Request View:
 - CSV file schema should be `Speaker ; Topic ; Date ; Words` And all fields are required (not-null)
 - Date format should be `yyyy-MM-dd`. Other formats give parser error.
 - `Words` should be greater than `0`
+- fetch.csv.timeout can not exceed
 - 
 ## Architecture
 * HttpClient: Custom client for handling HTTP requests to download CSV files.
-* CsvParser: Parses CSV data into Speech objects.
-* SpeechService: Analyzes the speeches and computes the statistics.
+* CsvParserService: Parses CSV data into Speech objects.
+* EvaluationService: Analyzes the speeches and computes the statistics.
+* CsvHttpService: Uses httpClient and fetches CSV data asynchronously
 * SpeechRoute: Manages the API route for handling requests to the /evaluation endpoint.
 
 
 ## Thought Process and Decisions
-* Modular Architecture: The project adopts a modular design for ease of maintenance and scalability. Each module, like HttpClient, CsvParser, and SpeechService, is responsible for a specific aspect of the application, ensuring separation of concerns.
-* Custom HTTP Client: Instead of using a third-party library, a custom HTTP client was implemented using Ktor's CIO engine. This decision was made to have finer control over the HTTP requests and to tailor error handling specific to the application's needs, especially for CSV file downloads.
-* CSV Parsing Strategy: The CsvParser was designed to transform CSV data into Speech objects. This approach was chosen for its simplicity and efficiency, allowing the application to directly process the structured CSV data.
+* Modular Architecture: The project adopts a modular design for ease of maintenance and scalability. Each module, like HttpClient, CsvParserService, CsvHttpService and EvaluationService, is responsible for a specific aspect of the application, ensuring separation of concerns.
+* RestTemplate HTTP Client: Used for fetching files.
+* CSV Parsing Strategy: The CsvParserService was designed to transform CSV data into Speech objects. This approach was chosen for its simplicity and efficiency, allowing the application to directly process the structured CSV data.
 * V1 (branch) is first implemented
 * V2 (branch) some of the ambiguities were removed, separation of concerns implemented cleaner, flow is changed.
 * V3 (branch) goroutines added for fetch all CSVs at one request and mockk lib used for mocking instead of mockito.
@@ -90,8 +92,8 @@ Swagger Request View:
 * Unique Max/Min Finder: A specialized algorithm was developed to ensure that the results for the most and least are unique. If multiple politicians share the top or bottom spot, the algorithm returns null, adhering to the requirement for a unique answer.
 
 ## Error Handling
-* Custom Exceptions: DownloadException and CsvParsingException were introduced to handle specific error scenarios. This ensures that the application provides clear and actionable error messages, enhancing the robustness of the system.
-* Status Pages Configuration: Ktor's StatusPages feature is utilized to catch these exceptions and respond with appropriate HTTP status codes and messages, ensuring a user-friendly API experience.
+* Custom Exceptions: EvaluationServiceException, CsvParsingException and CsvPHttpException were introduced to handle specific error scenarios. This ensures that the application provides clear and actionable error messages, enhancing the robustness of the system.
+* ErrorCodes: ErrorCode Enum used for ensuring a user-friendly API experience.
 
 ## Testing
 * Unit Tests: Ensure individual components function correctly based on possible real life scenarios.
