@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -32,8 +33,10 @@ internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc)
     @MockBean
     private lateinit var csvParserService: ICsvParserService
 
+    @Value("\${csv.server.address}")
+    private val url :String? = null
+
     companion object {
-        private const val URL = "http://localhost:81/"
         private val EVALUATION_RESULT: EvaluationResult = EvaluationResult(
                 mostSpeeches = "A",
                 mostSecurity = "B",
@@ -46,7 +49,7 @@ internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc)
     @Throws(Exception::class)
     fun evaluate_success() {
         Mockito.`when`(evaluationService.analyzeSpeeches(anyList())).thenReturn(EVALUATION_RESULT)
-        mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", URL))
+        mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", url))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.mostSpeeches", Matchers.`is`("A")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.mostSecurity", Matchers.`is`("B")))
@@ -57,7 +60,7 @@ internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc)
     @Throws(Exception::class)
     fun evaluate_withNotAvailableParam_failed() {
         Mockito.`when`(evaluationService.analyzeSpeeches(anyList())).thenReturn(EVALUATION_RESULT)
-        mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("abc", URL))
+        mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("abc", url))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect { result: MvcResult -> assertEquals(ErrorCode.URL_PARAM_REQUIRED_ERROR.value, result.resolvedException!!.message) }
     }
