@@ -3,6 +3,7 @@ package com.fashiondigital.politicalspeeches.controller
 import com.fashiondigital.politicalspeeches.exception.GlobalExceptionHandler
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
+import com.fashiondigital.politicalspeeches.service.ICsvHttpService
 import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import com.fashiondigital.politicalspeeches.service.IEvaluationService
 import org.hamcrest.Matchers
@@ -32,6 +33,9 @@ internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc)
 
     @MockBean
     private lateinit var csvParserService: ICsvParserService
+
+    @MockBean
+    private lateinit var csvHttpService: ICsvHttpService
 
     @Value("\${csv.server.address}")
     private val url :String? = null

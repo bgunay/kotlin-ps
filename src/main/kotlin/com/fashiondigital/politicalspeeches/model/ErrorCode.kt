@@ -12,4 +12,5 @@ enum class ErrorCode(val value: String) {
     SPEAKER_MISSING("Speaker is missing"),
     TOPIC_MISSING("Topic is missing"),
     GENERIC_ERROR("Generic Error, see logs for details"),
+    FETCH_CSV_TIMEOUT("Timeout exceeded, please try again")
 }

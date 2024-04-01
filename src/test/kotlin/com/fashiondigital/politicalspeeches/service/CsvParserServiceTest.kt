@@ -18,6 +18,7 @@ import com.fashiondigital.politicalspeeches.TestUtils.VALID_SPEECHES_2
 import com.fashiondigital.politicalspeeches.exception.CsvParsingException
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
+import com.fashiondigital.politicalspeeches.service.impl.CsvHttpService
 import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import io.mockk.coEvery
@@ -33,7 +34,8 @@ internal class CsvParserServiceTest {
 
     private val httpClientMock = mockk<HttpClient>(relaxed = true)
 
-    private var csvParserService = CsvParserService(httpClientMock)
+    private var csvParserService = CsvParserService()
+    private var csvHttpService = CsvHttpService(httpClientMock)
 
     @Test
     fun parseCSVsByUrls_withValidSingleUrl_success() {
@@ -41,11 +43,12 @@ internal class CsvParserServiceTest {
             ResponseEntity.ok(TestUtils.getResourceContent(arrayOf(VALID_SPEECHES_1, VALID_SPEECHES_2).random()))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
-        val content = csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
+        val content = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+        val speeches = csvParserService.parseCSV(content)
 
-        assertThat(content).isNotEmpty()
-        assertThat(content).hasSize(4)
-        content.map { it.speaker }.containsAll(listOf(SPEAKER_1, SPEAKER_2, SPEAKER_3))
+        assertThat(speeches).isNotEmpty()
+        assertThat(speeches).hasSize(4)
+        speeches.map { it.speaker }.containsAll(listOf(SPEAKER_1, SPEAKER_2, SPEAKER_3))
     }
 
 
@@ -54,7 +57,7 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ResponseEntity.ok("")
 
         val exception = assertThrows<CsvParsingException> {
-            csvParserService.parseCSVsByUrls(setOf(CSV_URL_1, CSV_URL_2))
+            csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1, CSV_URL_2))
         }
 
         exception.message?.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value)?.let { assertTrue(it) }
@@ -67,7 +70,7 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<CsvParsingException> {
-            csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
+            csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
         }
 
         exception.message?.contains(ErrorCode.WRONG_DELIMITER_CSV.value)?.let { assertTrue(it) }
@@ -79,7 +82,7 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<CsvParsingException> {
-            csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
+            csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
         }
 
         exception.message?.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value)?.let { assertTrue(it) }
@@ -91,7 +94,8 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<EvaluationServiceException> {
-            csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
+            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
         exception.message?.contains("could not be parsed")?.let { assertTrue(it) }
@@ -103,7 +107,8 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<CsvParsingException> {
-            csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
+            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
         exception.message?.contains(ErrorCode.MINUS_WORD_ERROR.value)?.let { assertTrue(it) }
@@ -116,7 +121,8 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<CsvParsingException> {
-            csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
+            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
         exception.message?.contains(ErrorCode.TOPIC_MISSING.value)?.let { assertTrue(it) }
@@ -129,7 +135,8 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<EvaluationServiceException> {
-            csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
+            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
         exception.message?.contains("expected one of [Date, Invalid Column, Topic, Words")?.let { assertTrue(it) }
