@@ -68,9 +68,9 @@ Swagger Request View:
 * Modular Architecture: The project adopts a modular design for ease of maintenance and scalability. Each module, like HttpClient, CsvParser, and SpeechService, is responsible for a specific aspect of the application, ensuring separation of concerns.
 * Custom HTTP Client: Instead of using a third-party library, a custom HTTP client was implemented using Ktor's CIO engine. This decision was made to have finer control over the HTTP requests and to tailor error handling specific to the application's needs, especially for CSV file downloads.
 * CSV Parsing Strategy: The CsvParser was designed to transform CSV data into Speech objects. This approach was chosen for its simplicity and efficiency, allowing the application to directly process the structured CSV data.
-* V1 is first implemented
-* V2 some of the ambiguities  were removed, separation of concerns implemented cleaner, flow is changed.
-* V3 goroutines added for fetch CSV and mockk lib used for mocking
+* V1 (branch) is first implemented
+* V2 (branch) some of the ambiguities were removed, separation of concerns implemented cleaner, flow is changed.
+* V3 (branch) goroutines added for fetch all CSVs at one request and mockk lib used for mocking instead of mockito.
 
 ## Algorithms
 * Speech Analysis: The core analysis algorithms reside in the SpeechService. These algorithms focus on grouping and aggregating speech data to derive meaningful statistics.
