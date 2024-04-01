@@ -23,7 +23,8 @@ import com.fashiondigital.politicalspeeches.util.HttpClient
 import io.mockk.coEvery
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.http.ResponseEntity
@@ -37,9 +38,9 @@ internal class CsvParserServiceTest {
 
     @Test
     fun parseCSVsByUrls_withValidSingleUrl_success() {
-
-        val ok = ResponseEntity.ok(TestUtils.getResourceContent(arrayOf(VALID_SPEECHES_1, VALID_SPEECHES_2).random()))
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ok
+        val response =
+            ResponseEntity.ok(TestUtils.getResourceContent(arrayOf(VALID_SPEECHES_1, VALID_SPEECHES_2).random()))
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val content = csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
 
@@ -56,80 +57,82 @@ internal class CsvParserServiceTest {
         val exception = assertThrows<CsvParsingException> {
             csvParserService.parseCSVsByUrls(setOf(CSV_URL_1, CSV_URL_2))
         }
-        Assertions.assertTrue(exception.message?.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value) == true)
+
+        exception.message?.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value)?.let { assertTrue(it) }
     }
 
 
     @Test
     fun parseCSVsByUrls_withWrongDelimiter_failed() {
-
-        val ok = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_DELIMITER))
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ok
+        val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_DELIMITER))
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<CsvParsingException> {
             csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
         }
-        Assertions.assertTrue(exception.message?.contains(ErrorCode.WRONG_DELIMITER_CSV.value) == true)
+
+        exception.message?.contains(ErrorCode.WRONG_DELIMITER_CSV.value)?.let { assertTrue(it) }
     }
 
     @Test
     fun parseCSVsByUrls_withEmptyCsv_failed() {
-
-        val ok = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_EMPTY))
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ok
+        val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_EMPTY))
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<CsvParsingException> {
             csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
         }
-        Assertions.assertTrue(exception.message?.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value) == true)
+
+        exception.message?.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value)?.let { assertTrue(it) }
     }
 
     @Test
     fun parseCSVsByUrls_withWrongDate_failed() {
-
-        val ok = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_DATE))
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ok
+        val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_DATE))
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<EvaluationServiceException> {
             csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
         }
-        Assertions.assertTrue(exception.message?.contains("could not be parsed") == true)
+
+        exception.message?.contains("could not be parsed")?.let { assertTrue(it) }
     }
 
     @Test
     fun parseCSVsByUrls_withMinusNumber_failed() {
-        val ok = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_MINUS_WORDS))
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ok
+        val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_MINUS_WORDS))
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<CsvParsingException> {
             csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
         }
-        Assertions.assertTrue(exception.message?.contains(ErrorCode.MINUS_WORD_ERROR.value) == true)
+
+        exception.message?.contains(ErrorCode.MINUS_WORD_ERROR.value)?.let { assertTrue(it) }
 
     }
 
     @Test
     fun parseCSVsByUrls_withMissingTopic_failed() {
-
-        val ok = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_MISSING_TOPIC))
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ok
+        val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_MISSING_TOPIC))
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<CsvParsingException> {
             csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
         }
-        Assertions.assertTrue(exception.message?.contains(ErrorCode.TOPIC_MISSING.value) == true)
+
+        exception.message?.contains(ErrorCode.TOPIC_MISSING.value)?.let { assertTrue(it) }
 
     }
 
     @Test
     fun parseCSVsByUrls_Invalid_Column_failed() {
-
-        val ok = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_COLUMN))
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ok
+        val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_COLUMN))
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
         val exception = assertThrows<EvaluationServiceException> {
             csvParserService.parseCSVsByUrls(setOf(CSV_URL_1))
         }
-        Assertions.assertTrue(exception.message?.contains("expected one of [Date, Invalid Column, Topic, Words") == true)
+
+        exception.message?.contains("expected one of [Date, Invalid Column, Topic, Words")?.let { assertTrue(it) }
     }
 }
