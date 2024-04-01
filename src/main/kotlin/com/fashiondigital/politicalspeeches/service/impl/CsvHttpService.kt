@@ -10,6 +10,7 @@ import kotlinx.coroutines.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
@@ -20,13 +21,17 @@ class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
     private val log: Logger = LoggerFactory.getLogger(CsvHttpService::class.java)
 
 
+
+    @Value("\${fetch.csv.timeout}")
+    private val fetchCsvTimeout = 0L
+
     //return <Speaker>
     override fun parseUrlsAndFetchCsvData(urls: Set<String>): List<String?> {
         log.info("parsing ${urls.size} urls started")
         val csvContents: List<ResponseEntity<String?>>
         runBlocking {
             try {
-                csvContents = withTimeout(Constants.FETCH_CSV_TIMEOUT) {
+                csvContents = withTimeout(fetchCsvTimeout) {
                     urls.map { url ->
                         async { httpClient.getHttpCSVResponse(url) }
                     }.awaitAll()

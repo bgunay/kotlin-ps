@@ -23,9 +23,18 @@ Run it (locally):
 The application exposes a GET endpoint `/evaluation` that accepts CSV file URLs as query parameters (e.g., `/evaluation?url1=link_to_csv1&url2=link_to_csv2`). It processes these CSV files to answer questions like which politician gave the most speeches in a specific year, who spoke most about homeland security, and who was the least wordy.
 
 
-### !!Important note about test
+###  Configurations
 * For integration test to success, change csv.server.address" property in application.properties to where you host your CSV files
-
+* For changing timeout for fetching CSVs, change "csv.server.address" property in application.properties
+```
+csv.server.address=http://localhost:81
+fetch.csv.timeout=2000
+```
+* Below values are coming from application.properties
+```
+- speech.target-year=2013
+- speech.security-topic=homeland security
+```
 ### Endpoint
 ```
 GET /evaluate?url1=https://example.com/valid-speeches-1.csv
