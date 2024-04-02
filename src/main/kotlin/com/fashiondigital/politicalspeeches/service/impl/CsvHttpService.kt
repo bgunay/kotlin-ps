@@ -40,9 +40,8 @@ class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
                     }.awaitAll()
                 }
             } catch (ex: TimeoutCancellationException) {
-                val csvPHttpException = CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT)
                 log.error(ErrorCode.FETCH_CSV_TIMEOUT.value, ex)
-                throw csvPHttpException
+                throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT)
             }
         }
         return csvContents.map { it.body }
