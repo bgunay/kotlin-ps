@@ -6,16 +6,15 @@ import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.model.constants.Constants
 import com.fashiondigital.politicalspeeches.model.constants.Constants.URL_HEADER_PATTERN
+import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import org.apache.logging.log4j.util.Strings
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import java.net.URL
 
 
 object ValidationUtil {
 
-    private val log: Logger = LoggerFactory.getLogger(ValidationUtil::class.java)
+    private val log by LoggerDelegate()
 
     //no need to support file, ftp or jar
     fun extractAndValidateUrlsFromRequest(headers: Map<String, String>): Set<String> {

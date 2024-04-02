@@ -3,8 +3,7 @@ package com.fashiondigital.politicalspeeches.service.impl
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
 import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.service.IEvaluationService
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service
 class EvaluationService : IEvaluationService {
 
     companion object {
-        private val log: Logger = LoggerFactory.getLogger(EvaluationService::class.java)
+        private val log by LoggerDelegate()
     }
 
     @Value("\${speech.target-year}")

@@ -6,10 +6,9 @@ import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.model.SpeechHeader
 import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import com.fashiondigital.politicalspeeches.util.CSVUtil
+import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
 import org.apache.commons.csv.CSVParser
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.time.LocalDate
@@ -23,8 +22,7 @@ class CsvParserService() : ICsvParserService {
     companion object {
         val DATE_TIME_FORMATTER: DateTimeFormatter =
             DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.ENGLISH)
-        private val log: Logger = LoggerFactory.getLogger(CsvParserService::class.java)
-
+        private val log by LoggerDelegate()
     }
 
 

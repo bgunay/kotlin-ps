@@ -4,10 +4,9 @@ import com.fashiondigital.politicalspeeches.exception.CsvPHttpException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.service.ICsvHttpService
 import com.fashiondigital.politicalspeeches.util.HttpClient
+import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
 import kotlinx.coroutines.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
@@ -17,9 +16,8 @@ import org.springframework.stereotype.Service
 @Service
 class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
 
-
     companion object {
-        private val log: Logger = LoggerFactory.getLogger(CsvHttpService::class.java)
+        private val log by LoggerDelegate()
     }
 
     @Value("\${fetch.csv.timeout}")
