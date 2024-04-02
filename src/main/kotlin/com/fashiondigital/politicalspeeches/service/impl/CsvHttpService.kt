@@ -29,7 +29,6 @@ class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
         val csvContents: List<ResponseEntity<String?>>
         runBlocking {
             try {
-                log.info("timeout {}",fetchCsvTimeout)
                 csvContents = withTimeout(fetchCsvTimeout) {
                     urls.map { url ->
                         async {
