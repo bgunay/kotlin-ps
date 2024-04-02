@@ -59,12 +59,12 @@ class CsvParserService() : ICsvParserService {
         } catch (ex: Exception) {
             when (ex) {
                 is CsvParsingException -> {
-                    log.error(ex.message, ex.cause)
+                    log.error(ex.message, ex)
                     throw ex
                 }
 
                 else -> {
-                    log.error(ex.message, ex.cause)
+                    log.error(ex.message, ex)
                     throw EvaluationServiceException(ex.message)
                 }
             }

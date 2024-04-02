@@ -26,9 +26,6 @@ class CsvParsingException : RuntimeException {
         this.errorCode = errorCode
     }
 
-    constructor(errorCode: ErrorCode, ex: Throwable?) : super(errorCode.value, ex) {
-        this.errorCode = errorCode
-    }
 }
 
 class CsvPHttpException(val errorCode: ErrorCode) : RuntimeException(errorCode.value)

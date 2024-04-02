@@ -22,14 +22,18 @@ object ValidationUtil {
         val result: MutableSet<String> = HashSet()
         for (key in headers.keys) {
             if (!key.startsWith(URL_HEADER_PATTERN)) {
-                throw EvaluationServiceException(ErrorCode.URL_PARAM_REQUIRED_ERROR)
+                val evaluationServiceException = EvaluationServiceException(ErrorCode.URL_PARAM_REQUIRED_ERROR)
+                log.error(ErrorCode.URL_PARAM_REQUIRED_ERROR.value, evaluationServiceException)
+                throw evaluationServiceException
             }
             if (isValidURL(headers[key])) {
                 result.add(headers[key]!!)
             }
         }
         if (result.isEmpty()) {
-            throw EvaluationServiceException(ErrorCode.URL_PARAM_REQUIRED_ERROR)
+            val evaluationServiceException = EvaluationServiceException(ErrorCode.URL_PARAM_REQUIRED_ERROR)
+            log.error(ErrorCode.URL_PARAM_REQUIRED_ERROR.value, evaluationServiceException)
+            throw evaluationServiceException
         }
         return result
     }
@@ -45,11 +49,11 @@ object ValidationUtil {
                 throw EvaluationServiceException(ErrorCode.UNSUPPORTED_PROTOCOL)
             }
             true
-        } catch (e: Exception) {
-            log.error(ErrorCode.UNSUPPORTED_PROTOCOL.value)
-            when (e) {
+        } catch (ex: Exception) {
+            log.error(ErrorCode.UNSUPPORTED_PROTOCOL.value, ex)
+            when (ex) {
                 is EvaluationServiceException -> throw EvaluationServiceException(ErrorCode.UNSUPPORTED_PROTOCOL)
-                else -> throw EvaluationServiceException(ErrorCode.URL_VALIDATION_ERROR, e)
+                else -> throw EvaluationServiceException(ErrorCode.URL_VALIDATION_ERROR, ex)
             }
         }
     }
@@ -57,28 +61,33 @@ object ValidationUtil {
 
     fun validateSpeech(speech: Speech) {
         if (speech.wordCount < 0) {
-            log.error(ErrorCode.MINUS_WORD_ERROR.value)
-            throw CsvParsingException(ErrorCode.MINUS_WORD_ERROR)
+            val csvParsingException = CsvParsingException(ErrorCode.MINUS_WORD_ERROR)
+            log.error(ErrorCode.MINUS_WORD_ERROR.value, csvParsingException)
+            throw csvParsingException
         }
         if (Strings.isEmpty(speech.topic)) {
-            log.error(ErrorCode.TOPIC_MISSING.value)
-            throw CsvParsingException(ErrorCode.TOPIC_MISSING)
+            val csvParsingException = CsvParsingException(ErrorCode.TOPIC_MISSING)
+            log.error(ErrorCode.TOPIC_MISSING.value, csvParsingException)
+            throw csvParsingException
         }
         if (Strings.isEmpty(speech.speaker)) {
-            log.error(ErrorCode.SPEAKER_MISSING.value)
-            throw CsvParsingException(ErrorCode.SPEAKER_MISSING)
+            val csvParsingException = CsvParsingException(ErrorCode.SPEAKER_MISSING)
+            log.error(ErrorCode.SPEAKER_MISSING.value, csvParsingException)
+            throw csvParsingException
         }
     }
 
 
     fun checkCsvResponseValid(response: ResponseEntity<String?>) {
         if (!response.hasBody() || Strings.isEmpty(response.body)) {
-            log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value)
-            throw CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
+            val csvParsingException = CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
+            log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value,csvParsingException)
+            throw csvParsingException
         }
         if (response.hasBody() && response.body!!.contains(",")) {
-            log.error(ErrorCode.WRONG_DELIMITER_CSV.value)
-            throw CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
+            val csvParsingException = CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
+            log.error(ErrorCode.WRONG_DELIMITER_CSV.value,csvParsingException)
+            throw csvParsingException
         }
 
     }
