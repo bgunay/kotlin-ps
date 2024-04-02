@@ -32,11 +32,14 @@ class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
                 log.info("timeout {}",fetchCsvTimeout)
                 csvContents = withTimeout(fetchCsvTimeout) {
                     urls.map { url ->
-                        async { httpClient.getHttpCSVResponse(url) }
+                        async {
+                            val httpCSVResponse = httpClient.getHttpCSVResponse(url)
+                            ValidationUtil.checkCsvResponseValid(httpCSVResponse)
+                            log.info("response fetched for $url")
+                            httpCSVResponse
+                        }
                     }.awaitAll()
                 }
-                ValidationUtil.checkCsvResponsesValid(csvContents)
-
             } catch (ex: TimeoutCancellationException) {
                 log.error(ErrorCode.FETCH_CSV_TIMEOUT.value)
                 throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT)

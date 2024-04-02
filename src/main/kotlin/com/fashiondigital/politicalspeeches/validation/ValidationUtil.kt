@@ -70,18 +70,18 @@ object ValidationUtil {
         }
     }
 
-    fun checkCsvResponsesValid(csvContents: List<ResponseEntity<String?>>) {
-        csvContents.forEach{ response ->
-            if (!response.hasBody() || Strings.isEmpty(response.body)) {
-                log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value)
-                throw CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
-            }
-            if (response.hasBody() && response.body!!.contains(",")) {
-                log.error(ErrorCode.WRONG_DELIMITER_CSV.value)
-                throw CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
-            }
+
+    fun checkCsvResponseValid(response: ResponseEntity<String?>) {
+        if (!response.hasBody() || Strings.isEmpty(response.body)) {
+            log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value)
+            throw CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
+        }
+        if (response.hasBody() && response.body!!.contains(",")) {
+            log.error(ErrorCode.WRONG_DELIMITER_CSV.value)
+            throw CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
         }
 
     }
+
 
 }
