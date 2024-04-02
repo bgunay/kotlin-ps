@@ -84,7 +84,8 @@ Swagger Request View:
 * V1 (branch) is first implemented
 * V2 (branch) some of the ambiguities were removed, separation of concerns implemented cleaner, flow is changed.
 * V3 (branch) goroutines added for fetch all CSVs at one request and mockk lib used for mocking instead of mockito.
-* V4 (branch) timeout added for requests and new service created for CSV file fetching operation, tests and exceptions added for timeout
+* V4 (branch) timeout added for requests and new service created for CSV file fetching operation, tests and exceptions added for timeout, logger implementation performance increased 
+and verbose fixed. 
 
 ## Algorithms
 * Speech Analysis: The core analysis algorithms reside in the SpeechService. These algorithms focus on grouping and aggregating speech data to derive meaningful statistics.
