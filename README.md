@@ -47,18 +47,21 @@ Host: localhost:8080
 
 [Api Documentation](http://localhost:8080/v3/api-docs)
 
+[Postman Collection URL](https://www.postman.com/bgunay1/workspace/public-workspace/request/1152813-947921c1-691a-4d43-b70a-3284e0d0ada5)
 
-- Postman workspace (collection) containing request with public csv urls 
-- Google Drive links may not work, serving in your local or cloud storage recommended
-[Postman URL](https://www.postman.com/bgunay1/workspace/public-workspace/request/1152813-947921c1-691a-4d43-b70a-3284e0d0ada5)
+- Postman workspace (collection) containing requests 
+- Serving in your local or cloud storage recommended
 
 ## Screenshots
-- ![img_1.png](screenshots/img_postman.png)
-
-
 Swagger Request View:
--  ![img.png](screenshots/img.png)
+[Swagger UI](http://localhost:8080/swagger-ui/index.html)
+![img_1.png](screenshots/img_postman.png)
 - 
+  Postman Collection:
+  [Postman Collection URL](https://www.postman.com/bgunay1/workspace/public-workspace/request/1152813-947921c1-691a-4d43-b70a-3284e0d0ada5)
+![img.png](screenshots/img.png)
+
+
 ### Restrictions
 - Url format should be `/evaluate?url1=...&url2=...&urln=...` Other query-params will be ignored.
 - Url schema should be `http` or `https`. Other protocols (`file`, `ftp`...) give error.
