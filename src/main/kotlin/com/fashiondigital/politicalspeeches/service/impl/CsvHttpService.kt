@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service
 @Service
 class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
 
-    private val log: Logger = LoggerFactory.getLogger(CsvHttpService::class.java)
 
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(CsvHttpService::class.java)
+    }
 
     @Value("\${fetch.csv.timeout}")
     private val fetchCsvTimeout: Long = 0

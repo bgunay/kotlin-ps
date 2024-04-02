@@ -12,8 +12,9 @@ import org.springframework.stereotype.Service
 @Service
 class EvaluationService : IEvaluationService {
 
-
-    private val log: Logger = LoggerFactory.getLogger(EvaluationService::class.java)
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(EvaluationService::class.java)
+    }
 
     @Value("\${speech.target-year}")
     private val targetYear = 0

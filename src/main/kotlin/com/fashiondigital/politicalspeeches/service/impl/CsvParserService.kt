@@ -2,20 +2,14 @@ package com.fashiondigital.politicalspeeches.service.impl
 
 import com.fashiondigital.politicalspeeches.exception.CsvParsingException
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
-import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.Speech
 import com.fashiondigital.politicalspeeches.model.SpeechHeader
-import com.fashiondigital.politicalspeeches.model.constants.Constants
 import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import com.fashiondigital.politicalspeeches.util.CSVUtil
-import com.fashiondigital.politicalspeeches.util.HttpClient
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
-import kotlinx.coroutines.*
 import org.apache.commons.csv.CSVParser
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.time.LocalDate
@@ -26,11 +20,11 @@ import java.util.*
 @Service
 class CsvParserService() : ICsvParserService {
 
-    private val log: Logger = LoggerFactory.getLogger(CsvParserService::class.java)
-
     companion object {
         val DATE_TIME_FORMATTER: DateTimeFormatter =
             DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.ENGLISH)
+        private val log: Logger = LoggerFactory.getLogger(CsvParserService::class.java)
+
     }
 
 

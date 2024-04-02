@@ -81,12 +81,12 @@ object ValidationUtil {
     fun checkCsvResponseValid(response: ResponseEntity<String?>) {
         if (!response.hasBody() || Strings.isEmpty(response.body)) {
             val csvParsingException = CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
-            log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value,csvParsingException)
+            log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value, csvParsingException)
             throw csvParsingException
         }
         if (response.hasBody() && response.body!!.contains(",")) {
             val csvParsingException = CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
-            log.error(ErrorCode.WRONG_DELIMITER_CSV.value,csvParsingException)
+            log.error(ErrorCode.WRONG_DELIMITER_CSV.value, csvParsingException)
             throw csvParsingException
         }
 
