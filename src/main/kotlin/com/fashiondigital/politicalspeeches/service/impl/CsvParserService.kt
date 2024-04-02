@@ -17,7 +17,7 @@ import java.util.*
 
 
 @Service
-class CsvParserService() : ICsvParserService {
+class CsvParserService : ICsvParserService {
 
     companion object {
         val DATE_TIME_FORMATTER: DateTimeFormatter =

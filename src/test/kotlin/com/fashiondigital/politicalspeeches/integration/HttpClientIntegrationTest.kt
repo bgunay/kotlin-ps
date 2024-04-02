@@ -13,6 +13,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.web.client.RestTemplate
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,7 +24,10 @@ class HttpClientIntegrationTest {
     private lateinit var csvParserService: CsvParserService
 
     @Autowired
-    private val httpClient = HttpClient()
+    private val restTemplate= RestTemplate()
+
+    @Autowired
+    private val httpClient = HttpClient(restTemplate)
 
     @Autowired
     private val evaluationService = EvaluationService()

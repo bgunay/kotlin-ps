@@ -7,14 +7,13 @@ import com.fashiondigital.politicalspeeches.util.HttpClient
 import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
 import kotlinx.coroutines.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 
 @Service
-class CsvHttpService(@Autowired val httpClient: HttpClient) : ICsvHttpService {
+class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
 
     companion object {
         private val log by LoggerDelegate()

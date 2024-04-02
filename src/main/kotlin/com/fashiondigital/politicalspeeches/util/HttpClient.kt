@@ -4,7 +4,6 @@ import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
@@ -13,10 +12,8 @@ import org.springframework.web.client.RestTemplate
 
 
 @Component
-class HttpClient {
+class HttpClient(private val restTemplate: RestTemplate) {
 
-    @Autowired
-    lateinit var restTemplate: RestTemplate
 
     companion object {
         private val log by LoggerDelegate()
