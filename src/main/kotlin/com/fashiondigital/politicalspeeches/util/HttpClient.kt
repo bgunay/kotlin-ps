@@ -13,21 +13,20 @@ import org.springframework.web.client.RestTemplate
 
 
 @Component
-class HttpClient{
+class HttpClient {
 
     @Autowired
     lateinit var restTemplate: RestTemplate
 
-   suspend fun getHttpCSVResponse(url: String): ResponseEntity<String?> {
+    suspend fun getHttpCSVResponse(url: String): ResponseEntity<String?> = withContext(Dispatchers.IO) {
         val response: ResponseEntity<String?>
         try {
-            response = withContext(Dispatchers.IO) {
-                restTemplate.exchange(url, HttpMethod.GET, null, String::class.java)
-            }
+            response = restTemplate.exchange(url, HttpMethod.GET, null, String::class.java)
         } catch (ex: RestClientException) {
             throw EvaluationServiceException(ErrorCode.URL_READER_ERROR, ex)
         }
-        return response
+
+        return@withContext response
     }
 
 
