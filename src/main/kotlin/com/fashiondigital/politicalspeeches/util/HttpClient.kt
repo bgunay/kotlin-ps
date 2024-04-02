@@ -18,11 +18,16 @@ class HttpClient {
     @Autowired
     lateinit var restTemplate: RestTemplate
 
+    companion object {
+        private val log by LoggerDelegate()
+    }
+
     suspend fun getHttpCSVResponse(url: String): ResponseEntity<String?> = withContext(Dispatchers.IO) {
         val response: ResponseEntity<String?>
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, null, String::class.java)
         } catch (ex: RestClientException) {
+            log.error(ErrorCode.URL_READER_ERROR.value, ex)
             throw EvaluationServiceException(ErrorCode.URL_READER_ERROR, ex)
         }
 
