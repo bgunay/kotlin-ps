@@ -23,7 +23,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.boot:spring-boot-starter-logging")
 	implementation("org.springframework.boot:spring-boot-starter-log4j2")
-
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

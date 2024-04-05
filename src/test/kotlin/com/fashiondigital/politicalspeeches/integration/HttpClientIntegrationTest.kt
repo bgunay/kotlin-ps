@@ -5,7 +5,7 @@ import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
 import com.fashiondigital.politicalspeeches.util.HttpClient
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.web.client.RestTemplate
+import kotlinx.coroutines.test.runTest
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,8 +37,9 @@ class HttpClientIntegrationTest {
     private val serverAddress: String? = null
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `test successful CSV download and processing`() = runBlocking {
+    fun `test successful CSV download and processing`() = runTest {
         val urls = listOf(
             "${serverAddress}/valid-speeches-1.csv",
             "${serverAddress}/valid-speeches-2.csv"
@@ -56,8 +58,9 @@ class HttpClientIntegrationTest {
         assertEquals("Caesare Collins", statistics.leastWordy)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `test CSV download failure`() = runBlocking {
+    fun `test CSV download failure`() = runTest {
         val invalidUrl = "${serverAddress}/invalid-url"
 
         val exception = assertThrows<EvaluationServiceException> {
