@@ -6,7 +6,10 @@ import com.fashiondigital.politicalspeeches.service.ICsvHttpService
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
-import kotlinx.coroutines.*
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withTimeout
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -23,27 +26,25 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
     private val fetchCsvTimeout: Long = 0
 
     //return <Speaker>
-    override fun parseUrlsAndFetchCsvData(urls: Set<String>): List<String?> {
+    override suspend fun parseUrlsAndFetchCsvData(urls: Set<String>): List<String?> {
         log.info("parsing ${urls.size} urls started")
-        val csvContents: List<ResponseEntity<String?>>
-        runBlocking {
-            try {
-                csvContents = withTimeout(fetchCsvTimeout) {
-                    urls.map { url ->
-                        async {
-                            val httpCSVResponse = httpClient.getHttpCSVResponse(url)
-                            ValidationUtil.checkCsvResponseValid(httpCSVResponse)
-                            log.info("response fetched for $url")
-                            httpCSVResponse
-                        }
-                    }.awaitAll()
-                }
-            } catch (ex: TimeoutCancellationException) {
-                log.error(ErrorCode.FETCH_CSV_TIMEOUT.value, ex)
-                throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT)
+        val csvContents: List<ResponseEntity<String>?>
+        try {
+            csvContents = withTimeout(fetchCsvTimeout) {
+                urls.map { url ->
+                    async {
+                        val httpCSVResponse = httpClient.getHttpCSVResponse(url)
+                        ValidationUtil.checkCsvResponseValid(httpCSVResponse)
+                        log.info("response fetched for $url")
+                        httpCSVResponse
+                    }
+                }.awaitAll()
             }
+        } catch (ex: TimeoutCancellationException) {
+            log.error(ErrorCode.FETCH_CSV_TIMEOUT.value, ex)
+            throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT)
         }
-        return csvContents.map { it.body }
+        return csvContents.map { it?.body }
     }
 
 }

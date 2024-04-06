@@ -24,6 +24,7 @@ import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -48,7 +49,7 @@ internal class CsvParserServiceTest {
 
 
     @Test
-    fun parseCSVsByUrls_withValidSingleUrl_success() {
+    fun parseCSVsByUrls_withValidSingleUrl_success() = runTest {
         val response =
             ResponseEntity.ok(TestUtils.getResourceContent(arrayOf(VALID_SPEECHES_1, VALID_SPEECHES_2).random()))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
@@ -63,7 +64,7 @@ internal class CsvParserServiceTest {
 
 
     @Test
-    fun parseCSVsByUrls_withEmptyContent_failed() {
+    fun parseCSVsByUrls_withEmptyContent_failed()  = runTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ResponseEntity.ok("")
 
         val exception = assertThrows<CsvParsingException> {
@@ -75,7 +76,7 @@ internal class CsvParserServiceTest {
 
 
     @Test
-    fun parseCSVsByUrls_withWrongDelimiter_failed() {
+    fun parseCSVsByUrls_withWrongDelimiter_failed() = runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_DELIMITER))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
@@ -87,7 +88,7 @@ internal class CsvParserServiceTest {
     }
 
     @Test
-    fun parseCSVsByUrls_withEmptyCsv_failed() {
+    fun parseCSVsByUrls_withEmptyCsv_failed() = runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_EMPTY))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
@@ -99,7 +100,7 @@ internal class CsvParserServiceTest {
     }
 
     @Test
-    fun parseCSVsByUrls_withWrongDate_failed() {
+    fun parseCSVsByUrls_withWrongDate_failed() = runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_DATE))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
@@ -112,7 +113,7 @@ internal class CsvParserServiceTest {
     }
 
     @Test
-    fun parseCSVsByUrls_withMinusNumber_failed() {
+    fun parseCSVsByUrls_withMinusNumber_failed()= runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_MINUS_WORDS))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
@@ -126,7 +127,7 @@ internal class CsvParserServiceTest {
     }
 
     @Test
-    fun parseCSVsByUrls_withMissingTopic_failed() {
+    fun parseCSVsByUrls_withMissingTopic_failed() = runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_MISSING_TOPIC))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
@@ -140,7 +141,7 @@ internal class CsvParserServiceTest {
     }
 
     @Test
-    fun parseCSVsByUrls_Invalid_Column_failed() {
+    fun parseCSVsByUrls_Invalid_Column_failed() = runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_COLUMN))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
@@ -153,7 +154,7 @@ internal class CsvParserServiceTest {
     }
 
     @Test
-    fun parseCSVsByUrls_timeoutExceed_failed() {
+    fun parseCSVsByUrls_timeoutExceed_failed() = runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(VALID_SPEECHES_1))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } answers { response
             Thread.sleep(3000)
