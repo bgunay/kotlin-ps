@@ -39,7 +39,7 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
             }
         } catch (ex: TimeoutCancellationException) {
             log.error(ErrorCode.FETCH_CSV_TIMEOUT.value, ex)
-            throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT,ex)
+            throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT, ex)
         }
         return csvContents.map { it?.body }
     }

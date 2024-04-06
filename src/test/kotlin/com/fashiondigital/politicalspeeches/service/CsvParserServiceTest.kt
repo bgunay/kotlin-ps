@@ -42,10 +42,10 @@ internal class CsvParserServiceTest {
     private var csvHttpService = CsvHttpService(httpClientMock)
 
 
-   @BeforeEach
-   fun setUp() {
-       ReflectionTestUtils.setField(csvHttpService, "fetchCsvTimeout", 2000L)
-   }
+    @BeforeEach
+    fun setUp() {
+        ReflectionTestUtils.setField(csvHttpService, "fetchCsvTimeout", 2000L)
+    }
 
 
     @Test
@@ -64,7 +64,7 @@ internal class CsvParserServiceTest {
 
 
     @Test
-    fun parseCSVsByUrls_withEmptyContent_failed()  = runTest {
+    fun parseCSVsByUrls_withEmptyContent_failed() = runTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns ResponseEntity.ok("")
 
         val exception = assertThrows<CsvParsingException> {
@@ -113,7 +113,7 @@ internal class CsvParserServiceTest {
     }
 
     @Test
-    fun parseCSVsByUrls_withMinusNumber_failed()= runTest {
+    fun parseCSVsByUrls_withMinusNumber_failed() = runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(INVALID_SPEECHES_MINUS_WORDS))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns response
 
@@ -156,9 +156,9 @@ internal class CsvParserServiceTest {
     @Test
     fun parseCSVsByUrls_timeoutExceed_failed() = runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(VALID_SPEECHES_1))
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } answers { response
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } answers {
             Thread.sleep(3000)
-              response
+            response
         }
 
         val exception = assertThrows<CsvPHttpException> {

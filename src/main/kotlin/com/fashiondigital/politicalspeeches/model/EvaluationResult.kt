@@ -8,5 +8,5 @@ data class EvaluationResult(
     @Schema(description = "mostSecurity", example = "Most Secure Politics")
     val mostSecurity: String?,
     @Schema(description = "leastWordy", example = "Least Wordy Politics")
-    val leastWordy: String?
+    val leastWordy: String?,
 )

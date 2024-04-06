@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class PoliticalSpeechesApplication
 
 fun main(args: Array<String>) {
-	runApplication<PoliticalSpeechesApplication>(*args)
+    runApplication<PoliticalSpeechesApplication>(*args)
 }

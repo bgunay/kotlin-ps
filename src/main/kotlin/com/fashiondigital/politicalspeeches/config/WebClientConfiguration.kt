@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient
 class WebClientConfiguration {
 
     @Value("\${csv.server.address}")
-    private val url :String? = null
+    private val url: String? = null
 
     @Bean
     fun webClient() = WebClient.builder().baseUrl(url!!).build()

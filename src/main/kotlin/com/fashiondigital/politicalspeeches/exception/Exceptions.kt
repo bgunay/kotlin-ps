@@ -19,20 +19,7 @@ class EvaluationServiceException : RuntimeException {
     }
 }
 
-class CsvParsingException : RuntimeException {
-    val errorCode: ErrorCode
-
-    constructor(errorCode: ErrorCode) : super(errorCode.value) {
-        this.errorCode = errorCode
-    }
+class CsvParsingException(val errorCode: ErrorCode) : RuntimeException(errorCode.value)
 
 
-}
-
-class CsvPHttpException: RuntimeException {
-    private val errorCode: ErrorCode
-
-    constructor(errorCode: ErrorCode, ex: Throwable?) : super(errorCode.value, ex) {
-        this.errorCode = errorCode
-    }
-}
+class CsvPHttpException(errorCode: ErrorCode, ex: Throwable?) : RuntimeException(errorCode.value, ex)
