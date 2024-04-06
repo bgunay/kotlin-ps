@@ -6,29 +6,24 @@ import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.web.client.RestTemplate
-import kotlinx.coroutines.test.runTest
+import org.springframework.web.reactive.function.client.WebClient
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class HttpClientIntegrationTest {
 
-
     @Autowired
     private lateinit var csvParserService: CsvParserService
-
-    @Autowired
-    private val restTemplate= RestTemplate()
-
-    @Autowired
-    private val httpClient = HttpClient(restTemplate)
 
     @Autowired
     private val evaluationService = EvaluationService()
@@ -36,6 +31,16 @@ class HttpClientIntegrationTest {
     @Value("\${csv.server.address}")
     private val serverAddress: String? = null
 
+
+    private lateinit var server: MockWebServer
+    private lateinit var httpClient: HttpClient
+
+    @BeforeEach
+    fun setup() {
+        server = MockWebServer()
+        val webClient = WebClient.builder().baseUrl(server.url("").toString()).build()
+        httpClient = HttpClient(webClient)
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -46,7 +51,7 @@ class HttpClientIntegrationTest {
         )
 
         val allSpeeches = urls.flatMap { url ->
-            val csvContent = httpClient.getHttpCSVResponse(url).body
+            val csvContent = httpClient.getHttpCSVResponse(url)!!.body
             val parseCSV = csvParserService.parseCSV(mutableListOf(csvContent))
             parseCSV
         }

@@ -77,8 +77,8 @@ object ValidationUtil {
     }
 
 
-    fun checkCsvResponseValid(response: ResponseEntity<String?>) {
-        if (!response.hasBody() || Strings.isEmpty(response.body)) {
+    fun checkCsvResponseValid(response: ResponseEntity<String>?) {
+        if (!response!!.hasBody() || Strings.isEmpty(response.body)) {
             val csvParsingException = CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
             log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value, csvParsingException)
             throw csvParsingException
