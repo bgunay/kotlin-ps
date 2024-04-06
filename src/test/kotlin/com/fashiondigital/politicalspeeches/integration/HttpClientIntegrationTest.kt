@@ -6,6 +6,7 @@ import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-import kotlinx.coroutines.test.runTest
 import org.springframework.web.reactive.function.client.WebClient
 
 
