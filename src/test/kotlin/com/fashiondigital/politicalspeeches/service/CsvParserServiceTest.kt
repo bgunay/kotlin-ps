@@ -24,6 +24,7 @@ import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -153,19 +154,19 @@ internal class CsvParserServiceTest {
         exception.message?.contains("expected one of [Date, Invalid Column, Topic, Words")?.let { assertTrue(it) }
     }
 
-//    @Test
-//    fun parseCSVsByUrls_timeoutExceed_failed() = runTest {
-//        val response = ResponseEntity.ok(TestUtils.getResourceContent(VALID_SPEECHES_1))
-//        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } answers {
-//            Thread.sleep(2500)
-//            response
-//        }
-//
-//        val exception = assertThrows<CsvPHttpException> {
-//            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
-//            csvParserService.parseCSV(parseUrlsAndFetchCsvData)
-//        }
-//
-//        exception.message?.contains(ErrorCode.FETCH_CSV_TIMEOUT.value)?.let { assertTrue(it) }
-//    }
+    @Test
+    fun parseCSVsByUrls_timeoutExceed_failed() = runTest {
+        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } coAnswers {
+            delay(3000)
+            val responseEntity =
+                ResponseEntity.ok(TestUtils.getResourceContent(arrayOf(VALID_SPEECHES_1, VALID_SPEECHES_2).random()))
+            responseEntity
+        }
+        val exception = assertThrows<CsvPHttpException> {
+            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            csvParserService.parseCSV(parseUrlsAndFetchCsvData)
+        }
+
+        exception.message?.contains(ErrorCode.FETCH_CSV_TIMEOUT.value)?.let { assertTrue(it) }
+    }
 }

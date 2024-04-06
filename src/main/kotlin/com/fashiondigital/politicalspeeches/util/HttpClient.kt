@@ -3,6 +3,7 @@ package com.fashiondigital.politicalspeeches.util
 import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
