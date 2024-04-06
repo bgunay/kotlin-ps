@@ -1,5 +1,6 @@
 package com.fashiondigital.politicalspeeches.service.impl
 
+import com.fashiondigital.politicalspeeches.config.mapAsync
 import com.fashiondigital.politicalspeeches.exception.CsvPHttpException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.service.ICsvHttpService
@@ -7,8 +8,6 @@ import com.fashiondigital.politicalspeeches.util.HttpClient
 import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withTimeout
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
@@ -31,18 +30,16 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
         val csvContents: List<ResponseEntity<String>?>
         try {
             csvContents = withTimeout(fetchCsvTimeout) {
-                urls.map { url ->
-                    async {
-                        val httpCSVResponse = httpClient.getHttpCSVResponse(url)
-                        ValidationUtil.checkCsvResponseValid(httpCSVResponse)
-                        log.info("response fetched for $url")
-                        httpCSVResponse
-                    }
-                }.awaitAll()
+                urls.mapAsync { url ->
+                    val httpCSVResponse = httpClient.getHttpCSVResponse(url)
+                    ValidationUtil.checkCsvResponseValid(httpCSVResponse)
+                    log.info("response fetched for $url")
+                    httpCSVResponse
+                }
             }
         } catch (ex: TimeoutCancellationException) {
             log.error(ErrorCode.FETCH_CSV_TIMEOUT.value, ex)
-            throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT)
+            throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT,ex)
         }
         return csvContents.map { it?.body }
     }

@@ -7,8 +7,10 @@ import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
 import com.fashiondigital.politicalspeeches.util.HttpClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,15 +22,8 @@ import org.springframework.web.reactive.function.client.WebClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class HttpClientIntegrationTest {
 
-
     @Autowired
     private lateinit var csvParserService: CsvParserService
-
-    @Autowired
-    private lateinit var webClient: WebClient
-
-    @Autowired
-    private val httpClient = HttpClient(webClient)
 
     @Autowired
     private val evaluationService = EvaluationService()
@@ -36,6 +31,16 @@ class HttpClientIntegrationTest {
     @Value("\${csv.server.address}")
     private val serverAddress: String? = null
 
+
+    private lateinit var server: MockWebServer
+    private lateinit var httpClient: HttpClient
+
+    @BeforeEach
+    fun setup() {
+        server = MockWebServer()
+        val webClient = WebClient.builder().baseUrl(server.url("").toString()).build()
+        httpClient = HttpClient(webClient)
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
