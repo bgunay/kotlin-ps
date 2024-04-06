@@ -117,7 +117,7 @@ timeout added for requests and new service created for CSV file fetching operati
 #### V5 (branch) - Most advanced (only controller test don't work)
 Webclient used instead of restClient and runBlocking removed and suspending controller function used.<br />
 Springmockk implementation used instead of mockito.<br />
-GlobalExceptionHandler does not work in Controller tests. Will be fixed. TODO!<br />
+GlobalExceptionHandler does not work with suspending functions within Controller. Will be fixed. TODO!<br />
 Asynchronous map implementation added for conciseness.<br />
 HttpClientIntegrationTest test fixed according to new implementation.
 
