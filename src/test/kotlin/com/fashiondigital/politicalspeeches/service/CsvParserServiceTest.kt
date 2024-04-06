@@ -157,7 +157,7 @@ internal class CsvParserServiceTest {
     fun parseCSVsByUrls_timeoutExceed_failed() = runTest {
         val response = ResponseEntity.ok(TestUtils.getResourceContent(VALID_SPEECHES_1))
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } answers {
-            Thread.sleep(3000)
+            Thread.sleep(2500)
             response
         }
 
