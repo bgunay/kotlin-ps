@@ -71,11 +71,13 @@ Host: localhost:8080
 
 ## Screenshots
 
-Swagger Request View:
+Swagger Request View:<br />
 [Swagger UI](http://localhost:8080/swagger-ui/index.html)
+
 ![img_1.png](screenshots/img_postman.png)
 
--
+<br />
+
 Postman Collection:
 [Postman Collection URL](https://www.postman.com/bgunay1/workspace/public-workspace/request/1152813-947921c1-691a-4d43-b70a-3284e0d0ada5)
 ![img.png](screenshots/img.png)
