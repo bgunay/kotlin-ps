@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
+// TODO: Fix GlobalExceptionHandler problem for suspending controller endpoints
 
 @WebMvcTest
 internal class EvaluationControllerTest(@Autowired val mockMvc: MockMvc) {
