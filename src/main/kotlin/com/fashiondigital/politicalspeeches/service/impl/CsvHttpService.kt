@@ -33,7 +33,7 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
             log.error(ErrorCode.FETCH_CSV_TIMEOUT.value, ex)
             throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT, ex)
         }
-        return csvContents.map { it?.body }
+        return csvContents.map { it!!.body }
     }
 
     public suspend fun transformAndCheck(url: String): ResponseEntity<String>? {
