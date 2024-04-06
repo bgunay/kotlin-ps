@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class ValidationUtilTest{
+class ValidationUtilTest {
     @Test
     fun `given a request with valid URL headers, when the function is called, then it should return the URLs as a set`() {
         // given

@@ -13,15 +13,15 @@ object TestUtils {
     const val SPEAKER_2 = "Bernhard Belling"
     const val SPEAKER_3 = "Caesare Collins"
     const val CSV_URL_1 = "https://csv1.com?url=example.csv"
-    const val  CSV_URL_2 = "https://csv2.com/url2=example.csv"
-    const val  VALID_SPEECHES_1 = "data/valid-speeches-1.csv"
-    const val  VALID_SPEECHES_2 = "data/valid-speeches-2.csv"
-    const val  INVALID_SPEECHES_DELIMITER = "data/invalid-speeches-delimiter.csv"
-    const val  INVALID_COLUMN = "data/invalid-column.csv"
-    const val  INVALID_SPEECHES_EMPTY = "data/invalid-speeches-empty.csv"
-    const val  INVALID_SPEECHES_DATE = "data/invalid-speeches-date.csv"
-    const val  INVALID_SPEECHES_MINUS_WORDS = "data/invalid-speeches-minus.csv"
-    const val  INVALID_SPEECHES_MISSING_TOPIC = "data/invalid-speeches-missing_topic.csv"
+    const val CSV_URL_2 = "https://csv2.com/url2=example.csv"
+    const val VALID_SPEECHES_1 = "data/valid-speeches-1.csv"
+    const val VALID_SPEECHES_2 = "data/valid-speeches-2.csv"
+    const val INVALID_SPEECHES_DELIMITER = "data/invalid-speeches-delimiter.csv"
+    const val INVALID_COLUMN = "data/invalid-column.csv"
+    const val INVALID_SPEECHES_EMPTY = "data/invalid-speeches-empty.csv"
+    const val INVALID_SPEECHES_DATE = "data/invalid-speeches-date.csv"
+    const val INVALID_SPEECHES_MINUS_WORDS = "data/invalid-speeches-minus.csv"
+    const val INVALID_SPEECHES_MISSING_TOPIC = "data/invalid-speeches-missing_topic.csv"
 
 
     fun zerFieldSpeechs(): List<Speech> {
@@ -29,8 +29,10 @@ object TestUtils {
     }
 
     fun getResourceContent(path: String): String {
-        return IOUtils.toString(TestUtils::class.java.getClassLoader().getResourceAsStream(path),
-            StandardCharsets.UTF_8.name())
+        return IOUtils.toString(
+            TestUtils::class.java.getClassLoader().getResourceAsStream(path),
+            StandardCharsets.UTF_8.name()
+        )
     }
 
 

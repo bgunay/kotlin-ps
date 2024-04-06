@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
-import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.test.util.ReflectionTestUtils
 
 
@@ -20,16 +18,11 @@ internal class EvaluationServiceTest {
     @InjectMocks
     private lateinit var evaluationService: EvaluationService
 
-    @Mock
-    private lateinit var csvParserService: ICsvParserService
-
-
     @Test
     fun evaluate_withAllValidFields() {
 
-        ReflectionTestUtils.setField(evaluationService, "targetYear", 2013);
-        ReflectionTestUtils.setField(evaluationService, "securityTopic", "homeland security");
-
+        ReflectionTestUtils.setField(evaluationService, "targetYear", 2013)
+        ReflectionTestUtils.setField(evaluationService, "securityTopic", "homeland security")
         val result: EvaluationResult = evaluationService.analyzeSpeeches(TestUtils.validSpeeches1)
 
         assertNull(result.mostSpeeches)
@@ -39,9 +32,8 @@ internal class EvaluationServiceTest {
 
     @Test
     fun evaluate_withNotUniqueFields() {
-        ReflectionTestUtils.setField(evaluationService, "targetYear", 2013);
-        ReflectionTestUtils.setField(evaluationService, "securityTopic", "homeland security");
-
+        ReflectionTestUtils.setField(evaluationService, "targetYear", 2013)
+        ReflectionTestUtils.setField(evaluationService, "securityTopic", "homeland security")
         val result: EvaluationResult = evaluationService.analyzeSpeeches(TestUtils.notUniqueSpeechs)
 
         assertThat(result.mostSpeeches).isNull()
@@ -51,8 +43,8 @@ internal class EvaluationServiceTest {
 
     @Test
     fun evaluate_withZeroFields() {
-        ReflectionTestUtils.setField(evaluationService, "targetYear", 2013);
-        ReflectionTestUtils.setField(evaluationService, "securityTopic", "homeland security");
+        ReflectionTestUtils.setField(evaluationService, "targetYear", 2013)
+        ReflectionTestUtils.setField(evaluationService, "securityTopic", "homeland security")
 
         val result: EvaluationResult = evaluationService.analyzeSpeeches(TestUtils.zerFieldSpeechs())
 
