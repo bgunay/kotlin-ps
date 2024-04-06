@@ -24,7 +24,6 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
     @Value("\${fetch.csv.timeout}")
     private val fetchCsvTimeout: Long = 0
 
-    //return <Speaker>
     override suspend fun parseUrlsAndFetchCsvData(urls: Set<String>): List<String?> {
         log.info("parsing ${urls.size} urls started")
         val csvContents: List<ResponseEntity<String>?>

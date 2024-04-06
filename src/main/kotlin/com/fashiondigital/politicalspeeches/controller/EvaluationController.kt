@@ -51,6 +51,6 @@ class EvaluationController(
             val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
             val speeches = csvParserService.parseCSV(csvData)
             val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
-            ResponseEntity.ok(result)
+            ResponseEntity.accepted().body(result)
         }
 }
