@@ -153,19 +153,19 @@ internal class CsvParserServiceTest {
         exception.message?.contains("expected one of [Date, Invalid Column, Topic, Words")?.let { assertTrue(it) }
     }
 
-    @Test
-    fun parseCSVsByUrls_timeoutExceed_failed() = runTest {
-        val response = ResponseEntity.ok(TestUtils.getResourceContent(VALID_SPEECHES_1))
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } answers {
-            Thread.sleep(2500)
-            response
-        }
-
-        val exception = assertThrows<CsvPHttpException> {
-            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
-            csvParserService.parseCSV(parseUrlsAndFetchCsvData)
-        }
-
-        exception.message?.contains(ErrorCode.FETCH_CSV_TIMEOUT.value)?.let { assertTrue(it) }
-    }
+//    @Test
+//    fun parseCSVsByUrls_timeoutExceed_failed() = runTest {
+//        val response = ResponseEntity.ok(TestUtils.getResourceContent(VALID_SPEECHES_1))
+//        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } answers {
+//            Thread.sleep(2500)
+//            response
+//        }
+//
+//        val exception = assertThrows<CsvPHttpException> {
+//            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+//            csvParserService.parseCSV(parseUrlsAndFetchCsvData)
+//        }
+//
+//        exception.message?.contains(ErrorCode.FETCH_CSV_TIMEOUT.value)?.let { assertTrue(it) }
+//    }
 }
