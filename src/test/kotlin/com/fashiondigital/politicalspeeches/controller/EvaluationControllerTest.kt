@@ -51,7 +51,7 @@ internal class EvaluationControllerTest(@Autowired val mockMvc: MockMvc) {
     fun evaluate_success() = runTest {
         coEvery { evaluationService.analyzeSpeeches(anyList()) } returns EVALUATION_RESULT
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", url))
-            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.status().isAccepted())
             .andExpect(MockMvcResultMatchers.jsonPath("$.mostSpeeches", Matchers.`is`("A")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.mostSecurity", Matchers.`is`("B")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.leastWordy", Matchers.`is`("C")))
