@@ -106,13 +106,13 @@ Postman Collection:
 * CSV Parsing Strategy: The CsvParserService was designed to transform CSV data into Speech objects. This approach was
   chosen for its simplicity and efficiency, allowing the application to directly process the structured CSV data.
 #### V1 (branch) is first implemented
-#### V2 (branch) 
+#### V2 (branch)
 Some of the ambiguities were removed, separation of concerns implemented cleaner, flow is changed.
 #### V3 (branch) 
 Goroutines added for fetch all CSVs at one request and mockk lib used for mocking instead of mockito.
-#### V4 (branch)
+#### V4 (branch) - Most Stable( all tests works)
 timeout added for requests and new service created for CSV file fetching operation, tests and exceptions added for timeout, logger implementation performance increased and verbose fixed.
-#### V5 (branch) 
+#### V5 (branch) - Most advanced (only controller test don't work)
 Webclient used instead of restClient and runBlocking removed and suspend controller fun used.
 Springmockk lib used instead of mockito. GlobalExceptionHandler does not work in Controller tests. Will be fixed.
 Asynchronous map added.
