@@ -21,18 +21,14 @@ object ValidationUtil {
         val result: MutableSet<String> = HashSet()
         for (key in headers.keys) {
             if (!key.startsWith(URL_HEADER_PATTERN)) {
-                val evaluationServiceException = EvaluationServiceException(ErrorCode.URL_PARAM_REQUIRED_ERROR)
-                log.error(ErrorCode.URL_PARAM_REQUIRED_ERROR.value, evaluationServiceException)
-                throw evaluationServiceException
+                throw EvaluationServiceException(ErrorCode.URL_PARAM_REQUIRED_ERROR)
             }
             if (isValidURL(headers[key])) {
                 result.add(headers[key]!!)
             }
         }
         if (result.isEmpty()) {
-            val evaluationServiceException = EvaluationServiceException(ErrorCode.URL_PARAM_REQUIRED_ERROR)
-            log.error(ErrorCode.URL_PARAM_REQUIRED_ERROR.value, evaluationServiceException)
-            throw evaluationServiceException
+            throw EvaluationServiceException(ErrorCode.URL_PARAM_REQUIRED_ERROR)
         }
         return result
     }
@@ -60,33 +56,23 @@ object ValidationUtil {
 
     fun validateSpeech(speech: Speech) {
         if (speech.wordCount < 0) {
-            val csvParsingException = CsvParsingException(ErrorCode.MINUS_WORD_ERROR)
-            log.error(ErrorCode.MINUS_WORD_ERROR.value, csvParsingException)
-            throw csvParsingException
+            throw CsvParsingException(ErrorCode.MINUS_WORD_ERROR)
         }
         if (Strings.isEmpty(speech.topic)) {
-            val csvParsingException = CsvParsingException(ErrorCode.TOPIC_MISSING)
-            log.error(ErrorCode.TOPIC_MISSING.value, csvParsingException)
-            throw csvParsingException
+            throw CsvParsingException(ErrorCode.TOPIC_MISSING)
         }
         if (Strings.isEmpty(speech.speaker)) {
-            val csvParsingException = CsvParsingException(ErrorCode.SPEAKER_MISSING)
-            log.error(ErrorCode.SPEAKER_MISSING.value, csvParsingException)
-            throw csvParsingException
+            throw CsvParsingException(ErrorCode.SPEAKER_MISSING)
         }
     }
 
 
     fun checkCsvResponseValid(response: ResponseEntity<String>?) {
         if (!response!!.hasBody() || Strings.isEmpty(response.body)) {
-            val csvParsingException = CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
-            log.error(ErrorCode.CSV_EMPTY_BODY_ERROR.value, csvParsingException)
-            throw csvParsingException
+            throw CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
         }
         if (response.hasBody() && response.body!!.contains(",")) {
-            val csvParsingException = CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
-            log.error(ErrorCode.WRONG_DELIMITER_CSV.value, csvParsingException)
-            throw csvParsingException
+            throw CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
         }
 
     }

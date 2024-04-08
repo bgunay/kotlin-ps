@@ -8,7 +8,6 @@ import com.fashiondigital.politicalspeeches.util.HttpClient
 import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.delay
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -28,7 +27,7 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
         log.info("parsing ${urls.size} urls started")
         val csvContents: List<ResponseEntity<String>?>
         try {
-            csvContents = urls.mapAsync(::transformAndCheck,fetchCsvTimeout)
+            csvContents = urls.mapAsync(::transformAndCheck, fetchCsvTimeout)
         } catch (ex: TimeoutCancellationException) {
             log.error(ErrorCode.FETCH_CSV_TIMEOUT.value, ex)
             throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT, ex)
@@ -36,7 +35,7 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
         return csvContents.map { it!!.body }
     }
 
-    public suspend fun transformAndCheck(url: String): ResponseEntity<String>? {
+    suspend fun transformAndCheck(url: String): ResponseEntity<String>? {
         val httpCSVResponse = httpClient.getHttpCSVResponse(url)
         ValidationUtil.checkCsvResponseValid(httpCSVResponse)
         log.info("response fetched for $url")

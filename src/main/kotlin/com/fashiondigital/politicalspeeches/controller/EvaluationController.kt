@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -43,13 +44,12 @@ class EvaluationController(
             )
         ]
     )
-    suspend fun evaluate(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> {
-        //Only valid if params are like "url1=address,url2=address,urlN..."
-        val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
-        val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
-        val speeches = csvParserService.parseCSV(csvData)
-        val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
-        return ResponseEntity.accepted().body(result)
-    }
-
+    fun evaluate(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> =
+        runBlocking {
+            val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
+            val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
+            val speeches = csvParserService.parseCSV(csvData)
+            val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
+            return@runBlocking ResponseEntity.accepted().body(result)
+        }
 }

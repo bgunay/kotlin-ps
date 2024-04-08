@@ -56,7 +56,6 @@ class CsvParserService : ICsvParserService {
                 }
 
                 else -> {
-                    log.error(ex.message, ex)
                     throw EvaluationServiceException(ex.message)
                 }
             }

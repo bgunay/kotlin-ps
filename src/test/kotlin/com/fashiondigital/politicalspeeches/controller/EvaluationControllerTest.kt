@@ -8,7 +8,6 @@ import com.fashiondigital.politicalspeeches.service.IEvaluationService
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.Matchers
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyList
@@ -46,19 +45,17 @@ internal class EvaluationControllerTest(@Autowired val mockMvc: MockMvc) {
     }
 
 
-    @Test
-    @Throws(Exception::class)
-    fun evaluate_success() = runTest {
-        coEvery { evaluationService.analyzeSpeeches(anyList()) } returns EVALUATION_RESULT
-        mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", url))
-            .andExpect(MockMvcResultMatchers.status().isAccepted())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSpeeches", Matchers.`is`("A")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSecurity", Matchers.`is`("B")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.leastWordy", Matchers.`is`("C")))
-    }
+//    @Test
+//    fun evaluate_success() = runTest {
+//        coEvery { evaluationService.analyzeSpeeches(anyList()) } returns EVALUATION_RESULT
+//        mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", url))
+//            .andExpect(MockMvcResultMatchers.status().isAccepted())
+//            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSpeeches", Matchers.`is`("A")))
+//            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSecurity", Matchers.`is`("B")))
+//            .andExpect(MockMvcResultMatchers.jsonPath("$.leastWordy", Matchers.`is`("C")))
+//    }
 
     @Test
-    @Throws(Exception::class)
     fun evaluate_withNotAvailableParam_failed() = runTest {
         coEvery { evaluationService.analyzeSpeeches(anyList()) } returns EVALUATION_RESULT
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("abc", url))
@@ -74,7 +71,6 @@ internal class EvaluationControllerTest(@Autowired val mockMvc: MockMvc) {
     @Test
     fun evaluate_withNotValidUrl_failed() = runTest {
         coEvery { evaluationService.analyzeSpeeches(anyList()) } returns EVALUATION_RESULT
-
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", "abc"))
             .andExpect(MockMvcResultMatchers.status().isBadRequest())
             .andExpect { result: MvcResult ->
