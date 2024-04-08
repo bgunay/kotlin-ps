@@ -114,14 +114,12 @@ Some of the ambiguities were removed, separation of concerns implemented cleaner
 Goroutines added for fetch all CSVs at one request and mockk lib used for mocking instead of mockito.
 #### V4 (branch) - Most Stable( all tests works)
 timeout added for requests and new service created for CSV file fetching operation, tests and exceptions added for timeout, logger implementation performance increased and verbose fixed.
-#### V5 (branch) - Most advanced (only controller test don't work)
+#### V5 (branch) - Most advanced
 Webclient used instead of restClient and runBlocking removed and suspending controller function used.<br />
 Springmockk implementation used instead of mockito.<br />
-GlobalExceptionHandler does not work with suspending functions within Controller. Will be fixed. TODO!<br />
 Asynchronous map implementation added for conciseness.<br />
 HttpClientIntegrationTest test fixed according to new implementation.
 
-TODO: GlobalExceptionHandler still not works for EvaluationControllerTest, will be fixed soon.
 
 ## Algorithms
 
