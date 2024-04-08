@@ -5,7 +5,6 @@ import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
 import com.fashiondigital.politicalspeeches.util.HttpClient
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -42,7 +41,6 @@ class HttpClientIntegrationTest {
         httpClient = HttpClient(webClient)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `test successful CSV download and processing`() = runTest {
         val urls = listOf(
@@ -51,7 +49,7 @@ class HttpClientIntegrationTest {
         )
 
         val allSpeeches = urls.flatMap { url ->
-            val csvContent = httpClient.getHttpCSVResponse(url)!!.body
+            val csvContent = httpClient.getHttpCSVResponse(url)
             val parseCSV = csvParserService.parseCSV(mutableListOf(csvContent))
             parseCSV
         }
@@ -63,7 +61,6 @@ class HttpClientIntegrationTest {
         assertEquals("Caesare Collins", statistics.leastWordy)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `test CSV download failure`() = runTest {
         val invalidUrl = "${serverAddress}/invalid-url"

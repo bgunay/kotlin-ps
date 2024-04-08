@@ -8,6 +8,7 @@ import com.fashiondigital.politicalspeeches.service.IEvaluationService
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import kotlinx.coroutines.test.runTest
+import org.hamcrest.Matchers
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyList

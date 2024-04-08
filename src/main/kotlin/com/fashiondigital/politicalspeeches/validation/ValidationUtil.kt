@@ -8,7 +8,6 @@ import com.fashiondigital.politicalspeeches.model.constants.Constants
 import com.fashiondigital.politicalspeeches.model.constants.Constants.URL_HEADER_PATTERN
 import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import org.apache.logging.log4j.util.Strings
-import org.springframework.http.ResponseEntity
 import java.net.URL
 
 
@@ -67,14 +66,13 @@ object ValidationUtil {
     }
 
 
-    fun checkCsvResponseValid(response: ResponseEntity<String>?) {
-        if (!response!!.hasBody() || Strings.isEmpty(response.body)) {
+    fun checkCsvResponseValid(response: String) {
+        if(response.isEmpty()){
             throw CsvParsingException(ErrorCode.CSV_EMPTY_BODY_ERROR)
         }
-        if (response.hasBody() && response.body!!.contains(",")) {
+        if (!response.contains(";") || response.contains(",")) {
             throw CsvParsingException(ErrorCode.WRONG_DELIMITER_CSV)
         }
-
     }
 
 

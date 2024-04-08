@@ -2,9 +2,6 @@ package com.fashiondigital.politicalspeeches.config
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withTimeout
 
 suspend fun <T, R> Iterable<T>.mapAsync(transformation: suspend (T) -> R, timeout: Long)
