@@ -28,7 +28,7 @@ class HttpClientIntegrationTest {
     private val evaluationService = EvaluationService()
 
     @Value("\${csv.server.address}")
-    private val serverAddress: String? = null
+    private lateinit var serverAddress: String
 
 
     private lateinit var server: MockWebServer

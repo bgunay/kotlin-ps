@@ -19,7 +19,7 @@ class EvaluationService : IEvaluationService {
     private val targetYear = 0
 
     @Value("\${speech.security-topic}")
-    private val securityTopic: String? = null
+    private lateinit var securityTopic:String
 
     override fun analyzeSpeeches(speeches: List<Speech>): EvaluationResult {
         log.info("Analyzing Speeches")

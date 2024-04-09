@@ -17,7 +17,7 @@ Process statistics about political speeches.
 Build it:
 ./gradlew build
 
-Execute the tests:
+Execute the tests: (!requires csv files hosted in "http://localhost:81" for integration tests)
 ./gradlew test
 
 Run it (locally):

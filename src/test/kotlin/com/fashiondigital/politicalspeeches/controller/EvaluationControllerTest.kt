@@ -35,7 +35,7 @@ internal class EvaluationControllerTest(@Autowired val mockMvc: MockMvc) {
     lateinit var csvHttpService: ICsvHttpService
 
     @Value("\${csv.server.address}")
-    private val url: String? = null
+    private lateinit var url: String
 
     companion object {
         private val EVALUATION_RESULT: EvaluationResult = EvaluationResult(
