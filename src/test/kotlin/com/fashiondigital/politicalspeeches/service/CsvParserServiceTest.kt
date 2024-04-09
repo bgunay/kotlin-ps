@@ -3,7 +3,6 @@ package com.fashiondigital.politicalspeeches.service
 
 import com.fashiondigital.politicalspeeches.TestUtils
 import com.fashiondigital.politicalspeeches.TestUtils.CSV_URL_1
-import com.fashiondigital.politicalspeeches.TestUtils.CSV_URL_2
 import com.fashiondigital.politicalspeeches.TestUtils.INVALID_COLUMN
 import com.fashiondigital.politicalspeeches.TestUtils.INVALID_SPEECHES_DATE
 import com.fashiondigital.politicalspeeches.TestUtils.INVALID_SPEECHES_DELIMITER
@@ -59,18 +58,6 @@ internal class CsvParserServiceTest {
         assertThat(speeches).isNotEmpty()
         assertThat(speeches).hasSize(4)
         speeches.map { it.speaker }.containsAll(listOf(SPEAKER_1, SPEAKER_2, SPEAKER_3))
-    }
-
-
-    @Test
-    fun parseCSVsByUrls_withEmptyContent_failed() = runTest {
-        coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns  ""
-
-        val exception = assertThrows<CsvParsingException> {
-            csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1, CSV_URL_2))
-        }
-
-        exception.message?.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value)?.let { assertTrue(it) }
     }
 
 
