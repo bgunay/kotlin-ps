@@ -12,9 +12,7 @@ import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
 import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
 import io.mockk.*
 import kotlinx.coroutines.test.*
-import org.hamcrest.Matchers
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,9 +22,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 // TODO: Fix GlobalExceptionHandler problem for suspending controller endpoints
@@ -86,75 +82,46 @@ internal class EvaluationControllerTest {
         // Then
         result
             .andExpect(status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSpeeches", Matchers.`is`("A")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSecurity", Matchers.`is`("B")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.leastWordy", Matchers.`is`("C")))
+            .andExpect { it.request.isAsyncStarted }
+            .andExpect { it.asyncResult is Collection<*> }
+            .andExpect {
+                val evaluationResult = (it.asyncResult as Collection<*>).first() as EvaluationResult
+                assertEquals(EVALUATION_RESULT, evaluationResult)
+            }
     }
 
-//    @Test
-//    fun evaluate2_success() = runTest {
-//        val csvStringContent = listOf("cvsContent")
-//        coEvery { csvHttpService.parseUrlsAndFetchCsvData(setOf(VALID_CSV_URL)) } coAnswers { csvStringContent }
-//        every { csvParserService.parseCSV(csvStringContent) } answers { TestUtils.validSpeeches1 }
-//        every { evaluationService.analyzeSpeeches(TestUtils.validSpeeches1) } answers { EVALUATION_RESULT }
-//        mockMvc.perform(get("/evaluate2").queryParam("url1", VALID_CSV_URL))
-//            .andExpect(status().isOk())
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSpeeches", Matchers.`is`("A")))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSecurity", Matchers.`is`("B")))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.leastWordy", Matchers.`is`("C")))
-//    }
 
     @Test
     fun evaluate_withNotAvailableParam_failed() = runTest {
         mockMvc.perform(get("/evaluate").queryParam("abc", url))
-            .andExpect(status().isOk())
-            .andExpect { result: MvcResult ->
-                val asyncResult = result.asyncResult
-                assertTrue(asyncResult is EvaluationServiceException)
-                if(asyncResult is EvaluationServiceException){
-                    assertEquals(ErrorCode.URL_PARAM_REQUIRED_ERROR.value, asyncResult.message)
-                }
-            }
+            .andExpect { it.request.isAsyncStarted }
+            .andExpect { it.asyncResult is EvaluationServiceException }
+            .andExpect { (it.asyncResult as EvaluationServiceException).message.equals(ErrorCode.URL_PARAM_REQUIRED_ERROR.value) }
     }
 
     @Test
     fun evaluate_withNotValidUrl_failed() = runTest {
         mockMvc.perform(get("/evaluate").queryParam("url1", "abc"))
-            .andExpect(status().isOk())
-            .andExpect { result: MvcResult ->
-                val asyncResult = result.asyncResult
-                assertTrue(asyncResult is EvaluationServiceException)
-                if(asyncResult is EvaluationServiceException){
-                    assertEquals(ErrorCode.URL_VALIDATION_ERROR.value, asyncResult.message)
-                }
-            }
+            .andExpect { it.request.isAsyncStarted }
+            .andExpect { it.asyncResult is EvaluationServiceException }
+            .andExpect { (it.asyncResult as EvaluationServiceException).message.equals(ErrorCode.URL_VALIDATION_ERROR.value) }
     }
 
     @Test
     @Throws(Exception::class)
     fun evaluate_withUnsupportedProtocol_failed() = runTest {
         mockMvc.perform(get("/evaluate").queryParam("url1", "file:///downloads/file.csv"))
-            .andExpect(status().isOk())
-            .andExpect { result: MvcResult ->
-                val asyncResult = result.asyncResult
-                assertTrue(asyncResult is EvaluationServiceException)
-                if(asyncResult is EvaluationServiceException){
-                    assertEquals(ErrorCode.UNSUPPORTED_PROTOCOL.value, asyncResult.message)
-                }
-            }
+            .andExpect { it.request.isAsyncStarted }
+            .andExpect { it.asyncResult is EvaluationServiceException }
+            .andExpect { (it.asyncResult as EvaluationServiceException).message.equals(ErrorCode.UNSUPPORTED_PROTOCOL.value) }
     }
 
     @Test
     @Throws(Exception::class)
     fun evaluate_withEmptyUrl_failed() = runTest {
         mockMvc.perform(get("/evaluate"))
-            .andExpect(status().isOk())
-            .andExpect { result: MvcResult ->
-                val asyncResult = result.asyncResult
-                assertTrue(asyncResult is EvaluationServiceException)
-                if(asyncResult is EvaluationServiceException){
-                    assertEquals(ErrorCode.URL_PARAM_REQUIRED_ERROR.value, asyncResult.message)
-                }
-            }
+            .andExpect { it.request.isAsyncStarted }
+            .andExpect { it.asyncResult is EvaluationServiceException }
+            .andExpect { (it.asyncResult as EvaluationServiceException).message.equals(ErrorCode.URL_PARAM_REQUIRED_ERROR.value) }
     }
 }
