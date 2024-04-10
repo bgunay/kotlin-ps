@@ -12,8 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.springframework.beans.factory.annotation.Autowired
@@ -59,7 +58,7 @@ class EvaluationController(
 
     @OptIn(DelicateCoroutinesApi::class)
     @GetMapping("evaluate2")
-    suspend fun evaluate2(@RequestParam headers: Map<String, String>) = GlobalScope.async {
+    suspend fun evaluate2(@RequestParam headers: Map<String, String>) = coroutineScope {
         val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
         val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
         val speeches = csvParserService.parseCSV(csvData)
