@@ -1,5 +1,6 @@
 package com.fashiondigital.politicalspeeches.controller
 
+import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.exception.GlobalExceptionHandler
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
@@ -50,7 +51,6 @@ internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc)
 
 
     @Test
-    @Throws(Exception::class)
     fun evaluate_success() {
         Mockito.`when`(evaluationService.analyzeSpeeches(anyList())).thenReturn(EVALUATION_RESULT)
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", url))
@@ -61,7 +61,7 @@ internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc)
     }
 
     @Test
-    @Throws(Exception::class)
+    @Throws(EvaluationServiceException::class)
     fun evaluate_withNotAvailableParam_failed() {
         Mockito.`when`(evaluationService.analyzeSpeeches(anyList())).thenReturn(EVALUATION_RESULT)
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("abc", url))
@@ -70,7 +70,7 @@ internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc)
     }
 
     @Test
-    @Throws(Exception::class)
+    @Throws(EvaluationServiceException::class)
     fun evaluate_withNotValidUrl_failed() {
         Mockito.`when`(evaluationService.analyzeSpeeches(anyList())).thenReturn(EVALUATION_RESULT)
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", "abc"))
@@ -79,7 +79,7 @@ internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc)
     }
 
     @Test
-    @Throws(Exception::class)
+    @Throws(EvaluationServiceException::class)
     fun evaluate_withUnsupportedProtocol_failed() {
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", "file:///downloads/file.csv"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -87,7 +87,7 @@ internal class EvaluationControllerTest(@Autowired private var mockMvc: MockMvc)
     }
 
     @Test
-    @Throws(Exception::class)
+    @Throws(EvaluationServiceException::class)
     fun evaluate_withEmptyUrl_failed() {
         mockMvc.perform(MockMvcRequestBuilders.get("/evaluate"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
