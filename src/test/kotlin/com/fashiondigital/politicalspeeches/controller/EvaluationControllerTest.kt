@@ -20,9 +20,13 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
+import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.request
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 // TODO: Fix GlobalExceptionHandler problem for suspending controller endpoints
@@ -93,35 +97,55 @@ internal class EvaluationControllerTest {
 
     @Test
     fun evaluate_withNotAvailableParam_failed() = runTest {
-        mockMvc.perform(get("/evaluate").queryParam("abc", url))
-            .andExpect { it.request.isAsyncStarted }
+        val mvcResult = mockMvc.perform(get("/evaluate").queryParam("abc", url))
+            .andExpect(request().asyncStarted())
             .andExpect { it.asyncResult is EvaluationServiceException }
             .andExpect { (it.asyncResult as EvaluationServiceException).message.equals(ErrorCode.URL_PARAM_REQUIRED_ERROR.value) }
+            .andReturn()
+
+        mockMvc.perform(asyncDispatch(mvcResult))
+            .andExpect { status().isBadRequest }
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
     }
 
     @Test
     fun evaluate_withNotValidUrl_failed() = runTest {
-        mockMvc.perform(get("/evaluate").queryParam("url1", "abc"))
-            .andExpect { it.request.isAsyncStarted }
+        val mvcResult = mockMvc.perform(get("/evaluate").queryParam("url1", "abc"))
+            .andExpect(request().asyncStarted())
             .andExpect { it.asyncResult is EvaluationServiceException }
             .andExpect { (it.asyncResult as EvaluationServiceException).message.equals(ErrorCode.URL_VALIDATION_ERROR.value) }
+            .andReturn()
+
+        mockMvc.perform(asyncDispatch(mvcResult))
+            .andExpect { status().isBadRequest }
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
     }
 
     @Test
     @Throws(Exception::class)
     fun evaluate_withUnsupportedProtocol_failed() = runTest {
-        mockMvc.perform(get("/evaluate").queryParam("url1", "file:///downloads/file.csv"))
-            .andExpect { it.request.isAsyncStarted }
+        val mvcResult = mockMvc.perform(get("/evaluate").queryParam("url1", "file:///downloads/file.csv"))
+            .andExpect(request().asyncStarted())
             .andExpect { it.asyncResult is EvaluationServiceException }
             .andExpect { (it.asyncResult as EvaluationServiceException).message.equals(ErrorCode.UNSUPPORTED_PROTOCOL.value) }
+            .andReturn()
+
+        mockMvc.perform(asyncDispatch(mvcResult))
+            .andExpect { status().isBadRequest }
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
     }
 
     @Test
     @Throws(Exception::class)
     fun evaluate_withEmptyUrl_failed() = runTest {
-        mockMvc.perform(get("/evaluate"))
-            .andExpect { it.request.isAsyncStarted }
+        val mvcResult = mockMvc.perform(get("/evaluate"))
+            .andExpect(request().asyncStarted())
             .andExpect { it.asyncResult is EvaluationServiceException }
             .andExpect { (it.asyncResult as EvaluationServiceException).message.equals(ErrorCode.URL_PARAM_REQUIRED_ERROR.value) }
+            .andReturn()
+
+        mockMvc.perform(asyncDispatch(mvcResult))
+            .andExpect { status().isBadRequest }
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
     }
 }
