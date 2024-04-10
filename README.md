@@ -145,3 +145,4 @@ HttpClientIntegrationTest test fixed according to new implementation.
 
 * Unit Tests: Ensure individual components function correctly based on possible real life scenarios.
 * Integration Tests: Verify the integration of different components and the overall workflow.
+* Reference for controller endpoints https://docs.spring.io/spring-framework/reference/languages/kotlin/coroutines.html
