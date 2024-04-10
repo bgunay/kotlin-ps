@@ -122,7 +122,6 @@ internal class EvaluationControllerTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun evaluate_withUnsupportedProtocol_failed() = runTest {
         val mvcResult = mockMvc.perform(get("/evaluate").queryParam("url1", "file:///downloads/file.csv"))
             .andExpect(request().asyncStarted())
@@ -136,7 +135,6 @@ internal class EvaluationControllerTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun evaluate_withEmptyUrl_failed() = runTest {
         val mvcResult = mockMvc.perform(get("/evaluate"))
             .andExpect(request().asyncStarted())

@@ -1,10 +1,9 @@
 package com.fashiondigital.politicalspeeches.exception
 
 import com.fashiondigital.politicalspeeches.model.ErrorCode
-import org.apache.coyote.BadRequestException
 
 
-class EvaluationServiceException : BadRequestException {
+class EvaluationServiceException : Exception {
     val errorCode: ErrorCode
 
     constructor(error: String?) : super(error) {
@@ -20,7 +19,7 @@ class EvaluationServiceException : BadRequestException {
     }
 }
 
-class CsvParsingException(val errorCode: ErrorCode) : BadRequestException(errorCode.value)
+class CsvParsingException(val errorCode: ErrorCode) : Exception(errorCode.value)
 
 
-class CsvPHttpException(errorCode: ErrorCode, ex: Throwable?) : BadRequestException(errorCode.value, ex)
+class CsvPHttpException(errorCode: ErrorCode, ex: Throwable?) : Exception(errorCode.value, ex)
