@@ -87,6 +87,27 @@ internal class EvaluationControllerTest {
         result
             .andExpect(status().isOk())
             .andExpect { it.request.isAsyncStarted }
+            .andExpect { it.asyncResult is EvaluationResult }
+            .andExpect {
+                assertEquals(EVALUATION_RESULT, it.asyncResult)
+            }
+    }
+
+    @Test
+    fun evaluateFlow_success() = runTest {
+        // Given
+        val csvStringContent = listOf("cvsContent")
+        coEvery { csvHttpService.parseUrlsAndFetchCsvData(setOf(VALID_CSV_URL)) } coAnswers { csvStringContent }
+        every { csvParserService.parseCSV(csvStringContent) } answers { TestUtils.validSpeeches1 }
+        every { evaluationService.analyzeSpeeches(TestUtils.validSpeeches1) } answers { EVALUATION_RESULT }
+
+        // When
+        val result = mockMvc.perform(get("/evaluate2").queryParam("url1", VALID_CSV_URL))
+
+        // Then
+        result
+            .andExpect(status().isOk())
+            .andExpect { it.request.isAsyncStarted }
             .andExpect { it.asyncResult is Collection<*> }
             .andExpect {
                 val evaluationResult = (it.asyncResult as Collection<*>).first() as EvaluationResult

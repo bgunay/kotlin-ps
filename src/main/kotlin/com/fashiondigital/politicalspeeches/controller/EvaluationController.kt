@@ -47,7 +47,17 @@ class EvaluationController(
         ]
     )
     @GetMapping("evaluate")
-    suspend fun evaluate(@RequestParam headers: Map<String, String>): Flow<EvaluationResult>? {
+    suspend fun evaluate(@RequestParam headers: Map<String, String>) = coroutineScope {
+        val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
+        val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
+        val speeches = csvParserService.parseCSV(csvData)
+        val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
+        result
+    }
+
+    //Flow returns List
+    @GetMapping("evaluate2")
+    suspend fun evaluate2(@RequestParam headers: Map<String, String>): Flow<EvaluationResult>? {
         val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
         val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
         val speeches = csvParserService.parseCSV(csvData)
@@ -55,16 +65,6 @@ class EvaluationController(
         return flowOf(result)
     }
 
-
-    @OptIn(DelicateCoroutinesApi::class)
-    @GetMapping("evaluate2")
-    suspend fun evaluate2(@RequestParam headers: Map<String, String>) = coroutineScope {
-        val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
-        val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
-        val speeches = csvParserService.parseCSV(csvData)
-        val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
-        result
-    }
 
 //    @GetMapping("evaluate3")
 //    fun evaluate3(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> =
