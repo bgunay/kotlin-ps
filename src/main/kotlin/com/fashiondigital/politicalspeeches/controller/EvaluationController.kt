@@ -49,7 +49,7 @@ class EvaluationController(
         ]
     )
     @GetMapping("evaluate")
-    fun evaluate2(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> =
+    fun evaluate(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> =
         runBlocking {
             val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
             val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
@@ -59,7 +59,7 @@ class EvaluationController(
         }
 
     @GetMapping("evaluate2")
-    suspend fun evaluate(@RequestParam headers: Map<String, String>): Flow<Any>? {
+    suspend fun evaluate2(@RequestParam headers: Map<String, String>): Flow<Any>? {
         try {
             val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
             val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)

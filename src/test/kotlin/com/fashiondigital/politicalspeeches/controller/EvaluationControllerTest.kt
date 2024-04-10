@@ -1,17 +1,20 @@
 package com.fashiondigital.politicalspeeches.controller
 
+import com.fashiondigital.politicalspeeches.TestUtils
+import com.fashiondigital.politicalspeeches.TestUtils.VALID_CSV_URL
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import com.fashiondigital.politicalspeeches.model.EvaluationResult
 import com.fashiondigital.politicalspeeches.service.ICsvHttpService
-import com.fashiondigital.politicalspeeches.service.ICsvParserService
 import com.fashiondigital.politicalspeeches.service.IEvaluationService
-import io.mockk.coEvery
-import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
+import com.fashiondigital.politicalspeeches.service.impl.CsvHttpService
+import com.fashiondigital.politicalspeeches.service.impl.CsvParserService
+import com.fashiondigital.politicalspeeches.service.impl.EvaluationService
+import io.mockk.*
+import kotlinx.coroutines.test.*
+import org.hamcrest.Matchers
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers.anyList
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -21,15 +24,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 // TODO: Fix GlobalExceptionHandler problem for suspending controller endpoints
 
 
 @ExtendWith(SpringExtension::class)
-@WebMvcTest
-internal class EvaluationControllerTest(@Autowired val mockMvc: MockMvc) {
+@WebMvcTest(EvaluationController::class)
+internal class EvaluationControllerTest {
 
+    @Autowired
+    private lateinit var mockMvc: MockMvc
 
     @Value("\${csv.server.address}")
     private lateinit var url: String
@@ -37,15 +43,24 @@ internal class EvaluationControllerTest(@Autowired val mockMvc: MockMvc) {
     @TestConfiguration
     class ControllerTestConfig {
         @Bean
-        fun evaluationService() = mockk<IEvaluationService>()
+        fun evaluationService() = mockk<EvaluationService>()
+
         @Bean
-        fun csvParserService() = mockk<ICsvParserService>()
+        fun csvParserService() = mockk<CsvParserService>()
+
         @Bean
-        fun csvHttpService() = mockk<ICsvHttpService>()
+        fun csvHttpService() = mockk<CsvHttpService>()
     }
 
+    @Autowired
+    private lateinit var csvParserService: CsvParserService
 
-    private val evaluationService = mockk<IEvaluationService>(relaxed = true)
+    @Autowired
+    private lateinit var evaluationService: IEvaluationService
+
+    @Autowired
+    private lateinit var csvHttpService: ICsvHttpService
+
 
     companion object {
         private val EVALUATION_RESULT: EvaluationResult = EvaluationResult(
@@ -55,20 +70,21 @@ internal class EvaluationControllerTest(@Autowired val mockMvc: MockMvc) {
         )
     }
 
-
-//    @Test
-//    fun evaluate_success() = runTest {
-//        coEvery { evaluationService.analyzeSpeeches(anyList()) } returns EVALUATION_RESULT
-//        mockMvc.perform(MockMvcRequestBuilders.get("/evaluate").queryParam("url1", url))
-//            .andExpect(MockMvcResultMatchers.status().isAccepted())
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSpeeches", Matchers.`is`("A")))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSecurity", Matchers.`is`("B")))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.leastWordy", Matchers.`is`("C")))
-//    }
+    @Test
+    fun evaluate_success() = runTest {
+        val csvStringContent = listOf("cvsContent")
+        coEvery { csvHttpService.parseUrlsAndFetchCsvData(setOf(VALID_CSV_URL)) } coAnswers { csvStringContent }
+        every { csvParserService.parseCSV(csvStringContent) } answers { TestUtils.validSpeeches1 }
+        every { evaluationService.analyzeSpeeches(TestUtils.validSpeeches1) } answers { EVALUATION_RESULT }
+        mockMvc.perform(get("/evaluate").queryParam("url1", VALID_CSV_URL))
+            .andExpect(status().isAccepted())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSpeeches", Matchers.`is`("A")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.mostSecurity", Matchers.`is`("B")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.leastWordy", Matchers.`is`("C")))
+    }
 
     @Test
     fun evaluate_withNotAvailableParam_failed() = runTest {
-        coEvery { evaluationService.analyzeSpeeches(anyList()) } returns EVALUATION_RESULT
         mockMvc.perform(get("/evaluate").queryParam("abc", url))
             .andExpect(status().isBadRequest())
             .andExpect { result: MvcResult ->
@@ -81,7 +97,6 @@ internal class EvaluationControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun evaluate_withNotValidUrl_failed() = runTest {
-        coEvery { evaluationService.analyzeSpeeches(anyList()) } returns EVALUATION_RESULT
         mockMvc.perform(get("/evaluate").queryParam("url1", "abc"))
             .andExpect(status().isBadRequest())
             .andExpect { result: MvcResult ->
