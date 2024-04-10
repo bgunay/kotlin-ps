@@ -4,7 +4,6 @@ import com.fashiondigital.politicalspeeches.exception.EvaluationServiceException
 import com.fashiondigital.politicalspeeches.model.ErrorCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
@@ -17,7 +16,6 @@ class HttpClient(private val webClient: WebClient) {
     suspend fun getHttpCSVResponse(url: String): String = withContext(Dispatchers.IO) {
         try {
             val response = webClient.get().uri(url)
-                .accept(MediaType.parseMediaType("text/csv"))
                 .retrieve().awaitBody<String>()
             return@withContext response
         } catch (ex: WebClientResponseException) {
