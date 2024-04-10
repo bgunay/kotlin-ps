@@ -111,7 +111,7 @@ Postman Collection:
 #### V2 (branch)
 Some of the ambiguities were removed, separation of concerns implemented cleaner, flow is changed.
 #### V3 (branch) 
-Goroutines added for fetch all CSVs at one request and mockk lib used for mocking instead of mockito.
+Goroutines added for fetch all CSVs at one request and mockk lib used for mocking instead of mockito in service.
 #### V4 (branch) - Most Stable( all tests works)
 timeout added for requests and new service created for CSV file fetching operation, tests and exceptions added for timeout, logger implementation performance increased and verbose fixed.
 #### V5 (branch) - Advanced, Final implementation
