@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -67,12 +66,11 @@ class EvaluationController(
 
 
     @GetMapping("evaluate3")
-    fun evaluate3(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> =
-        runBlocking {
+    suspend fun evaluate3(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> {
             val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
             val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
             val speeches = csvParserService.parseCSV(csvData)
             val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
-            return@runBlocking ResponseEntity.ok(result)
+            return ResponseEntity.ok(result)
         }
 }

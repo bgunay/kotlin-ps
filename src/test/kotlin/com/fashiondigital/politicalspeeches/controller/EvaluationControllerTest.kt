@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch
@@ -73,7 +75,7 @@ internal class EvaluationControllerTest {
     }
 
     @Test
-    fun evaluate_success() = runTest {
+    fun evaluateCoroutineScope_success() = runTest {
         // Given
         val csvStringContent = listOf("cvsContent")
         coEvery { csvHttpService.parseUrlsAndFetchCsvData(setOf(VALID_CSV_URL)) } coAnswers { csvStringContent }
@@ -115,6 +117,27 @@ internal class EvaluationControllerTest {
             }
     }
 
+    @Test
+    fun evaluateSuspend_success() = runTest {
+        // Given
+        val csvStringContent = listOf("cvsContent")
+        coEvery { csvHttpService.parseUrlsAndFetchCsvData(setOf(VALID_CSV_URL)) } coAnswers { csvStringContent }
+        every { csvParserService.parseCSV(csvStringContent) } answers { TestUtils.validSpeeches1 }
+        every { evaluationService.analyzeSpeeches(TestUtils.validSpeeches1) } answers { EVALUATION_RESULT }
+
+        // When
+        val result = mockMvc.perform(get("/evaluate3").queryParam("url1", VALID_CSV_URL))
+
+        // Then
+        result
+            .andExpect(status().isOk())
+            .andExpect { it.request.isAsyncStarted }
+            .andExpect { it.asyncResult is EvaluationResult }
+            .andExpect {
+                assertEquals(EVALUATION_RESULT, (it.asyncResult as ResponseEntity<*>).body)
+                assertEquals(HttpStatusCode.valueOf(200), (it.asyncResult as ResponseEntity<*>).statusCode)
+            }
+    }
 
     @Test
     fun evaluate_withNotAvailableParam_failed() = runTest {
