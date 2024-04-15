@@ -147,4 +147,6 @@ Third endpoint is sync (normal) endpoint. We choose right for flow and goroutine
 
 * Unit Tests: Ensure individual components function correctly based on possible real life scenarios.
 * Integration Tests: Verify the integration of different components and the overall workflow.
-* Reference for controller endpoints https://docs.spring.io/spring-framework/reference/languages/kotlin/coroutines.html
+
+#### Springdoc Reference for controller endpoints: 
+https://docs.spring.io/spring-framework/reference/languages/kotlin/coroutines.html
