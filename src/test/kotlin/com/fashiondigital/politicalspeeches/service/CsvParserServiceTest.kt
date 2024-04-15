@@ -70,7 +70,8 @@ internal class CsvParserServiceTest {
             csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
         }
 
-        exception.message?.contains(ErrorCode.WRONG_DELIMITER_CSV.value)?.let { assertTrue(it) }
+        exception.message?.let { assertTrue(it.contains(ErrorCode.WRONG_DELIMITER_CSV.value)) }
+
     }
 
     @Test
@@ -82,7 +83,7 @@ internal class CsvParserServiceTest {
             csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
         }
 
-        exception.message?.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value)?.let { assertTrue(it) }
+        exception.message?.let { assertTrue(it.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value)) }
     }
 
     @Test
@@ -95,7 +96,7 @@ internal class CsvParserServiceTest {
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
-        exception.message?.contains("could not be parsed")?.let { assertTrue(it) }
+        exception.message?.let { assertTrue(it.contains("could not be parsed")) }
     }
 
     @Test
@@ -108,8 +109,7 @@ internal class CsvParserServiceTest {
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
-        exception.message?.contains(ErrorCode.MINUS_WORD_ERROR.value)?.let { assertTrue(it) }
-
+        exception.message?.let { assertTrue(it.contains(ErrorCode.MINUS_WORD_ERROR.value)) }
     }
 
     @Test
@@ -122,8 +122,7 @@ internal class CsvParserServiceTest {
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
-        exception.message?.contains(ErrorCode.TOPIC_MISSING.value)?.let { assertTrue(it) }
-
+        exception.message?.let { assertTrue(it.contains(ErrorCode.TOPIC_MISSING.value)) }
     }
 
     @Test
@@ -136,7 +135,7 @@ internal class CsvParserServiceTest {
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
-        exception.message?.contains("expected one of [Date, Invalid Column, Topic, Words")?.let { assertTrue(it) }
+        exception.message?.let { assertTrue(it.contains("expected one of [Date, Invalid Column, Topic, Words")) }
     }
 
     @Test
@@ -151,6 +150,6 @@ internal class CsvParserServiceTest {
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
-        exception.message?.contains(ErrorCode.FETCH_CSV_TIMEOUT.value)?.let { assertTrue(it) }
+        exception.message?.let { assertTrue(it.contains(ErrorCode.FETCH_CSV_TIMEOUT.value)) }
     }
 }
