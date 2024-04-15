@@ -36,10 +36,12 @@ wordy.
 * For integration test to success, change csv.server.address" property in application.properties to where you host your
   CSV files
 * For changing timeout for fetching CSVs, change "csv.server.address" property in application.properties
+* For changing parallelism for fetching CSVs, change "request.buffer.capacity" property in application.properties
 
 ```
 csv.server.address=http://localhost:81
 fetch.csv.timeout=2000
+request.buffer.capacity=10
 ```
 
 * Below values are coming from application.properties
