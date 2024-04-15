@@ -8,6 +8,9 @@ import com.fashiondigital.politicalspeeches.util.HttpClient
 import com.fashiondigital.politicalspeeches.util.LoggerDelegate
 import com.fashiondigital.politicalspeeches.validation.ValidationUtil
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.map
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -22,11 +25,18 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
     @Value("\${fetch.csv.timeout}")
     private val fetchCsvTimeout: Long = 0
 
-    override suspend fun parseUrlsAndFetchCsvData(urls: Set<String>): List<String?> {
+    override suspend fun fetchCsvData(urls: Set<String>): List<String?> {
         log.info("parsing ${urls.size} urls started")
         val csvContents: List<String>
         try {
-            csvContents = urls.mapAsync(::transformAndCheck, fetchCsvTimeout)
+            csvContents = urls.mapAsync(
+                {
+                    val content = fetchContent(it)
+                    validateContent(content)
+                    content
+                },
+                fetchCsvTimeout
+            )
         } catch (ex: TimeoutCancellationException) {
             log.error(ErrorCode.FETCH_CSV_TIMEOUT.value, ex)
             throw CsvPHttpException(ErrorCode.FETCH_CSV_TIMEOUT, ex)
@@ -34,11 +44,28 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
         return csvContents
     }
 
-    suspend fun transformAndCheck(url: String): String {
+    // for buffered version
+    override suspend fun fetchCsvData2(urls: Set<String>): List<String?> {
+        log.info("parsing ${urls.size} urls started")
+        val csvContents = mutableListOf<String>()
+        val flow = urls.asFlow()
+        flow.buffer(10).map { url ->
+            fetchContent(url)
+                .also { validateContent(it) }
+        }.collect {
+            csvContents.add(it)
+        }
+        return csvContents
+    }
+
+    suspend fun fetchContent(url: String): String {
         val httpCSVResponse = httpClient.getHttpCSVResponse(url)
-        ValidationUtil.checkCsvResponseValid(httpCSVResponse)
         log.info("response fetched for $url")
         return httpCSVResponse
+    }
+
+    private fun validateContent(httpCSVResponse: String) {
+        ValidationUtil.checkCsvResponseValid(httpCSVResponse)
     }
 
 }
