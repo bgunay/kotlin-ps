@@ -73,6 +73,8 @@ class EvaluationController(
      * @return A Flow of the evaluation result of the specified CSV files.
      *  Flow returns List, its flux equivalent in coroutines world.
      *  fun handler(): Flux<T> becomes fun handler(): Flow<T>
+     *
+     *  We can send async response to client with emit.
      */
     @GetMapping("evaluate2")
     suspend fun evaluate2(@RequestParam headers: Map<String, String>): Flow<EvaluationResult>? {
