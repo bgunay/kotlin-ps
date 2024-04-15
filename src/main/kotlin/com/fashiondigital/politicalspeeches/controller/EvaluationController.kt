@@ -60,7 +60,7 @@ class EvaluationController(
     @GetMapping("evaluate")
     suspend fun evaluate(@RequestParam headers: Map<String, String>) = coroutineScope {
         val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
-        val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
+        val csvData = csvHttpService.fetchCsvData(urlParams)
         val speeches = csvParserService.parseCSV(csvData)
         val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
         result
@@ -77,7 +77,7 @@ class EvaluationController(
     @GetMapping("evaluate2")
     suspend fun evaluate2(@RequestParam headers: Map<String, String>): Flow<EvaluationResult>? {
         val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
-        val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
+        val csvData = csvHttpService.fetchCsvData(urlParams)
         val speeches = csvParserService.parseCSV(csvData)
         val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
         return flowOf(result)
@@ -96,7 +96,7 @@ class EvaluationController(
     @GetMapping("evaluate3")
     suspend fun evaluate3(@RequestParam headers: Map<String, String>): ResponseEntity<EvaluationResult> {
             val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
-            val csvData = csvHttpService.parseUrlsAndFetchCsvData(urlParams)
+            val csvData = csvHttpService.fetchCsvData(urlParams)
             val speeches = csvParserService.parseCSV(csvData)
             val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
             return ResponseEntity.ok(result)

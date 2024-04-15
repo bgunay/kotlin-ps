@@ -52,7 +52,7 @@ internal class CsvParserServiceTest {
         val mockResponse = TestUtils.getResourceContent(arrayOf(VALID_SPEECHES_1, VALID_SPEECHES_2).random())
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns mockResponse
 
-        val content = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+        val content = csvHttpService.fetchCsvData(setOf(CSV_URL_1))
         val speeches = csvParserService.parseCSV(content)
 
         assertThat(speeches).isNotEmpty()
@@ -67,7 +67,7 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns mockResponse
 
         val exception = assertThrows<CsvParsingException> {
-            csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            csvHttpService.fetchCsvData(setOf(CSV_URL_1))
         }
 
         exception.message?.let { assertTrue(it.contains(ErrorCode.WRONG_DELIMITER_CSV.value)) }
@@ -80,7 +80,7 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns mockResponse
 
         val exception = assertThrows<CsvParsingException> {
-            csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            csvHttpService.fetchCsvData(setOf(CSV_URL_1))
         }
 
         exception.message?.let { assertTrue(it.contains(ErrorCode.CSV_EMPTY_BODY_ERROR.value)) }
@@ -92,7 +92,7 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns mockResponse
 
         val exception = assertThrows<EvaluationServiceException> {
-            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            val parseUrlsAndFetchCsvData = csvHttpService.fetchCsvData(setOf(CSV_URL_1))
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
@@ -105,7 +105,7 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns mockResponse
 
         val exception = assertThrows<CsvParsingException> {
-            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            val parseUrlsAndFetchCsvData = csvHttpService.fetchCsvData(setOf(CSV_URL_1))
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
@@ -118,7 +118,7 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns mockResponse
 
         val exception = assertThrows<CsvParsingException> {
-            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            val parseUrlsAndFetchCsvData = csvHttpService.fetchCsvData(setOf(CSV_URL_1))
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
@@ -131,7 +131,7 @@ internal class CsvParserServiceTest {
         coEvery { httpClientMock.getHttpCSVResponse(CSV_URL_1) } returns mockResponse
 
         val exception = assertThrows<EvaluationServiceException> {
-            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            val parseUrlsAndFetchCsvData = csvHttpService.fetchCsvData(setOf(CSV_URL_1))
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
@@ -146,7 +146,7 @@ internal class CsvParserServiceTest {
             mockResponse
         }
         val exception = assertThrows<CsvPHttpException> {
-            val parseUrlsAndFetchCsvData = csvHttpService.parseUrlsAndFetchCsvData(setOf(CSV_URL_1))
+            val parseUrlsAndFetchCsvData = csvHttpService.fetchCsvData(setOf(CSV_URL_1))
             csvParserService.parseCSV(parseUrlsAndFetchCsvData)
         }
 
