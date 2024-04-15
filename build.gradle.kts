@@ -48,17 +48,24 @@ dependencies {
 
 }
 
+//The Xjsr305=strict is a JVM compiler argument that is passed to the Kotlin compiler
+// via the kotlinOptions block in the Gradle build file.
+// This argument is used to enable strict null checking in the Kotlin code.
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs += "-Xjsr305=strict"
         jvmTarget = "17"
     }
 }
+kotlin {
+    jvmToolchain(17)
+}
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-
+// Ubuntu Jammy Jellyfish build. it is part of the build process,
+// as it allows the application to be deployed and run in a containerized environment.
 tasks.bootBuildImage {
     builder.set("paketobuildpacks/builder-jammy-base:latest")
 }
