@@ -77,7 +77,7 @@ class EvaluationController(
     @GetMapping("evaluate2")
     suspend fun evaluate2(@RequestParam headers: Map<String, String>): Flow<EvaluationResult>? {
         val urlParams: Set<String> = ValidationUtil.extractAndValidateUrlsFromRequest(headers)
-        val csvData = csvHttpService.fetchCsvData(urlParams)
+        val csvData = csvHttpService.fetchCsvDataWithFlow(urlParams)
         val speeches = csvParserService.parseCSV(csvData)
         val result: EvaluationResult = evaluationService.analyzeSpeeches(speeches)
         return flowOf(result)

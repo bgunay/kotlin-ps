@@ -99,7 +99,7 @@ internal class EvaluationControllerTest {
     fun evaluateFlow_success() = runTest {
         // Given
         val csvStringContent = listOf("cvsContent")
-        coEvery { csvHttpService.fetchCsvData(setOf(VALID_CSV_URL)) } coAnswers { csvStringContent }
+        coEvery { csvHttpService.fetchCsvDataWithFlow(setOf(VALID_CSV_URL)) } coAnswers { csvStringContent }
         every { csvParserService.parseCSV(csvStringContent) } answers { TestUtils.validSpeeches1 }
         every { evaluationService.analyzeSpeeches(TestUtils.validSpeeches1) } answers { EVALUATION_RESULT }
 

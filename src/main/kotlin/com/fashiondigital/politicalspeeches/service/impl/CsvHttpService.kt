@@ -25,6 +25,9 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
     @Value("\${fetch.csv.timeout}")
     private val fetchCsvTimeout: Long = 0
 
+    @Value("\${request.buffer.capacity}")
+    private val bufferCapacity: Int = 0
+
     override suspend fun fetchCsvData(urls: Set<String>): List<String?> {
         log.info("parsing ${urls.size} urls started")
         val csvContents: List<String>
@@ -45,11 +48,11 @@ class CsvHttpService(private val httpClient: HttpClient) : ICsvHttpService {
     }
 
     // for buffered version
-    override suspend fun fetchCsvData2(urls: Set<String>): List<String?> {
+    override suspend fun fetchCsvDataWithFlow(urls: Set<String>): List<String?> {
         log.info("parsing ${urls.size} urls started")
         val csvContents = mutableListOf<String>()
         val flow = urls.asFlow()
-        flow.buffer(10).map { url ->
+        flow.buffer(bufferCapacity).map { url ->
             fetchContent(url)
                 .also { validateContent(it) }
         }.collect {
