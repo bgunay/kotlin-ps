@@ -23,9 +23,10 @@ class EvaluationService : IEvaluationService {
 
     override fun analyzeSpeeches(speeches: List<Speech>): EvaluationResult {
         log.info("Analyzing Speeches")
-        val mostSpeeches = findUniqueMax(speeches.filter { it.date.year == targetYear }, Speech::speaker)
-        val mostSecurity = findUniqueMax(speeches.filter { it.topic == securityTopic }, Speech::speaker)
-        val leastWordy = findUniqueMin(speeches, Speech::speaker)
+        val selector = Speech::speaker
+        val mostSpeeches = findUniqueMax(speeches.filter { it.date.year == targetYear }, selector)
+        val mostSecurity = findUniqueMax(speeches.filter { it.topic == securityTopic }, selector)
+        val leastWordy = findUniqueMin(speeches, selector)
 
         return EvaluationResult(
             mostSpeeches = mostSpeeches,
